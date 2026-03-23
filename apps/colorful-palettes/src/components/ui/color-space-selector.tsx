@@ -12,7 +12,8 @@ import { ChevronsUpDownIcon } from "./chevrons-up-down";
 import { useHover } from "react-aria";
 
 export function ColorSpaceSelector() {
-  const { colorFormat, setColorFormat } = useColorfulStore();
+  const colorFormat = useColorfulStore.use.colorFormat();
+  const setColorFormat = useColorfulStore.use.setColorFormat();
   const { isHovered, hoverProps } = useHover({});
   return (
     <div className="flex flex-col gap-1">

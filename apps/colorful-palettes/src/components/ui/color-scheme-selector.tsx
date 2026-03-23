@@ -13,7 +13,8 @@ import { useHover } from "react-aria";
 import { COLOR_SCHEMES } from "@cosmos/colorful";
 
 export function ColorSchemeSelector() {
-  const { colorScheme, setColorScheme } = useColorfulStore();
+  const colorScheme = useColorfulStore.use.colorScheme();
+  const setColorScheme = useColorfulStore.use.setColorScheme();
   const { isHovered, hoverProps } = useHover({});
   return (
     <div className="flex flex-col gap-1">

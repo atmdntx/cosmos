@@ -3,7 +3,8 @@ import { Checkbox } from "./checkbox";
 import { Field, FieldContent, FieldDescription, FieldLabel, FieldTitle } from "./field";
 
 export function LightDarkSelector() {
-  const { useLightDark, setUseLightDark } = useColorfulStore();
+  const useLightDark = useColorfulStore.use.useLightDark();
+  const setUseLightDark = useColorfulStore.use.setUseLightDark();
   return (
     <FieldLabel htmlFor="light-dark">
       <Field orientation="horizontal">

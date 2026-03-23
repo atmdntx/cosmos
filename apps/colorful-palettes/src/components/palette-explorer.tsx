@@ -4,7 +4,8 @@ import { useMemo } from "react";
 import { Palette } from "./ui/palette";
 
 export function PaletteExplorer() {
-  const { baseColor, colorScheme } = useColorfulStore();
+  const baseColor = useColorfulStore.use.baseColor();
+  const colorScheme = useColorfulStore.use.colorScheme();
   const {
     primaryPalette,
     secondaryPalette,

@@ -12,7 +12,7 @@ import { AppVisualizer } from "#/components/app-visualizer";
 export const Route = createFileRoute("/")({ component: App });
 
 function App() {
-  const { baseColor } = useColorfulStore();
+  const baseColor = useColorfulStore.use.baseColor();
   return (
     <main className="flex min-h-0 flex-1 flex-col gap-6 pt-3 p-6 md:flex-row-reverse">
       <AppVisualizer>

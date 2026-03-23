@@ -67,7 +67,7 @@ interface ColorSwatchProps extends AriaColorSwatchProps {
 function ColorSwatch(props: ColorSwatchProps) {
   const { className, style, showInfo, shade } = props;
   const { colorSwatchProps } = useColorSwatch(props);
-  const { colorFormat } = useColorfulStore();
+  const colorFormat = useColorfulStore.use.colorFormat();
   const colorOutputId = useId();
   const contrastOutputId = useId();
   if (typeof showInfo === "boolean" && Boolean(showInfo)) {
@@ -157,7 +157,7 @@ function ColorSlider(props: AriaColorSliderProps) {
 function ColorPicker(props: ColorPickerProps) {
   const colorPickerState = useColorPickerState(props);
   const { color } = colorPickerState;
-  const { setBaseColor } = useColorfulStore();
+  const setBaseColor = useColorfulStore.use.setBaseColor();
   return (
     <Field className="gap-1">
       <FieldLabel className="text-xs font-semibold text-muted-foreground">Base color</FieldLabel>

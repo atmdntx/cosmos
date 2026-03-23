@@ -10,7 +10,11 @@ import { CodeBlock } from "./ui/codeblock";
 
 export function Exporter() {
   const { hoverProps, isHovered } = useHover({});
-  const { baseColor, colorFormat, colorScheme, useLightDark } = useColorfulStore();
+
+  const baseColor = useColorfulStore.use.baseColor();
+  const colorFormat = useColorfulStore.use.colorFormat();
+  const colorScheme = useColorfulStore.use.colorScheme();
+  const useLightDark = useColorfulStore.use.useLightDark();
   const { cssString, tailwindString } = useMemo(
     () => new themeGenerator(baseColor, { colorFormat, colorScheme, useLightDark }),
     [baseColor, colorFormat, colorScheme, useLightDark],
