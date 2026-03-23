@@ -287,6 +287,9 @@ importers:
       '@cosmos/colorful':
         specifier: workspace:*
         version: link:../colorful
+      colorjs.io:
+        specifier: 'catalog:'
+        version: 0.6.1
     devDependencies:
       '@types/node':
         specifier: ^25.5.0

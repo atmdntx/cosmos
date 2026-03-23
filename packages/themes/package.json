@@ -31,7 +31,8 @@
     "prepublishOnly": "vp run build"
   },
   "dependencies": {
-    "@cosmos/colorful": "workspace:*"
+    "@cosmos/colorful": "workspace:*",
+    "colorjs.io": "catalog:"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
