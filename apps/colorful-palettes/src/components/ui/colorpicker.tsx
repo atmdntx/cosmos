@@ -20,11 +20,12 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { cn } from "#/lib/utils";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "./input-group";
-import { useColorfulStore } from "#/lib/store";
+
 import { Field, FieldLabel } from "./field";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./hover-card";
 import type { ColorfulShade } from "@cosmos/colorful";
 import { CopyButton } from "./copybutton";
+import { useColorfulStore } from "#/store/store";
 
 function ColorArea(props: AriaColorAreaProps) {
   const inputXRef = useRef<HTMLInputElement>(null);
@@ -157,7 +158,7 @@ function ColorSlider(props: AriaColorSliderProps) {
 function ColorPicker(props: ColorPickerProps) {
   const colorPickerState = useColorPickerState(props);
   const { color } = colorPickerState;
-  const setBaseColor = useColorfulStore.use.setBaseColor();
+  const setInputColor = useColorfulStore.use.setInputColor();
   return (
     <Field className="gap-1">
       <FieldLabel className="text-xs font-semibold text-muted-foreground">Base color</FieldLabel>
@@ -168,7 +169,7 @@ function ColorPicker(props: ColorPickerProps) {
           value={color}
           onChange={(e) => {
             colorPickerState.setColor(e);
-            setBaseColor(String(e));
+            setInputColor(String(e));
           }}
         />
         <InputGroupAddon align="inline-end">
@@ -191,13 +192,13 @@ function ColorPicker(props: ColorPickerProps) {
                 yChannel="lightness"
                 value={color}
                 onChange={(e) => colorPickerState.setColor(e)}
-                onChangeEnd={(e) => setBaseColor(String(e))}
+                onChangeEnd={(e) => setInputColor(String(e))}
               />
               <div className="flex flex-col gap-2">
                 <ColorSlider
                   value={color}
                   onChange={(e) => colorPickerState.setColor(e)}
-                  onChangeEnd={(e) => setBaseColor(String(e))}
+                  onChangeEnd={(e) => setInputColor(String(e))}
                   colorSpace="hsl"
                   channel="hue"
                 />

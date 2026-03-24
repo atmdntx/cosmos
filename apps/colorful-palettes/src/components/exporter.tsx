@@ -1,12 +1,11 @@
-import React, { Suspense, useMemo } from "react";
+import React, { Suspense } from "react";
 import { useHover } from "react-aria";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { DownloadIcon } from "./ui/download";
 import { Tabs, TabsContent, TabsIndicator, TabsList, TabsTrigger } from "./ui/tabs";
-import { themeGenerator } from "@cosmos/themes";
-import { useColorfulStore } from "#/lib/store";
 import { Spinner } from "./ui/spinner";
+import { useColorfulStore } from "#/store/store";
 
 const CodeBlock = React.lazy(() =>
   import("./ui/codeblock").then((m) => ({ default: m.CodeBlock })),
@@ -14,16 +13,8 @@ const CodeBlock = React.lazy(() =>
 
 export function Exporter() {
   const { hoverProps, isHovered } = useHover({});
-
-  const baseColor = useColorfulStore.use.baseColor();
-  const colorFormat = useColorfulStore.use.colorFormat();
-  const colorScheme = useColorfulStore.use.colorScheme();
-  const useLightDark = useColorfulStore.use.useLightDark();
-  const { cssString, tailwindString } = useMemo(
-    () => new themeGenerator(baseColor, { colorFormat, colorScheme, useLightDark }),
-    [baseColor, colorFormat, colorScheme, useLightDark],
-  );
-
+  const cssString = useColorfulStore.use.cssString();
+  const tailwindString = useColorfulStore.use.tailwindString();
   return (
     <Dialog>
       <DialogTrigger

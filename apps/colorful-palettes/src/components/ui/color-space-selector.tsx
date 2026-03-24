@@ -7,9 +7,10 @@ import {
 } from "./dropdown-menu";
 import { Button } from "./button";
 import { COLOR_FORMATS } from "#/lib/constants";
-import { useColorfulStore } from "#/lib/store";
+
 import { ChevronsUpDownIcon } from "./chevrons-up-down";
 import { useHover } from "react-aria";
+import { useColorfulStore } from "#/store/store";
 
 export function ColorSpaceSelector() {
   const colorFormat = useColorfulStore.use.colorFormat();

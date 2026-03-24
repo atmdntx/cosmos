@@ -1,4 +1,4 @@
-import { useColorfulStore } from "#/lib/store";
+import { useColorfulStore } from "#/store/store";
 import { Checkbox } from "./checkbox";
 import { Field, FieldContent, FieldDescription, FieldLabel, FieldTitle } from "./field";
 

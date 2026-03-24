@@ -7,10 +7,10 @@ import {
 } from "./dropdown-menu";
 import { Button } from "./button";
 
-import { useColorfulStore } from "#/lib/store";
 import { ChevronsUpDownIcon } from "./chevrons-up-down";
 import { useHover } from "react-aria";
 import { COLOR_SCHEMES } from "@cosmos/colorful";
+import { useColorfulStore } from "#/store/store";
 
 export function ColorSchemeSelector() {
   const colorScheme = useColorfulStore.use.colorScheme();

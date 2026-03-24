@@ -1,20 +1,18 @@
-import { useColorfulStore } from "#/lib/store";
-import { colorfulPaletteCreator } from "@cosmos/colorful";
-import { useMemo } from "react";
 import { Palette } from "./ui/palette";
+import { useColorfulStore } from "#/store/store";
 
 export function PaletteExplorer() {
-  const baseColor = useColorfulStore.use.baseColor();
-  const colorScheme = useColorfulStore.use.colorScheme();
+  const palettes = useColorfulStore.use.colorfulPalettes();
+  if (!palettes) return null;
+
   const {
     primaryPalette,
     secondaryPalette,
     tertiaryPalette,
+    errorPalette,
     neutralPalette,
     grayPalette,
-    errorPalette,
-  } = useMemo(() => new colorfulPaletteCreator(baseColor, colorScheme), [baseColor, colorScheme]);
-
+  } = palettes;
   return (
     <div className="grid grid-cols-2 xl:grid-cols-3 gap-6 p-6 h-auto">
       <Palette label="Primary" palette={primaryPalette} />

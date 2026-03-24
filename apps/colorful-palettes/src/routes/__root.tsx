@@ -6,6 +6,8 @@ import Header from "../components/header";
 import appCss from "../styles.css?url";
 import { TooltipProvider } from "#/components/ui/tooltip";
 import { THEME_COLORS, ThemeProvider, useHtmlClass } from "#/components/ui/theme-provider";
+import { useColorfulStore } from "#/store/store";
+import { useEffect } from "react";
 
 export const Route = createRootRouteWithContext()({
   head: () => ({
@@ -56,6 +58,12 @@ export const Route = createRootRouteWithContext()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const htmlClass = useHtmlClass();
+  const regenerate = useColorfulStore((state) => state.regenerate);
+
+  useEffect(() => {
+    regenerate();
+  }, [regenerate]);
+
   return (
     <html lang="en" className={htmlClass} suppressHydrationWarning>
       <head>
