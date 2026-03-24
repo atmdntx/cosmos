@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { Suspense, useMemo } from "react";
 import { useHover } from "react-aria";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
@@ -6,7 +6,11 @@ import { DownloadIcon } from "./ui/download";
 import { Tabs, TabsContent, TabsIndicator, TabsList, TabsTrigger } from "./ui/tabs";
 import { themeGenerator } from "@cosmos/themes";
 import { useColorfulStore } from "#/lib/store";
-import { CodeBlock } from "./ui/codeblock";
+import { Spinner } from "./ui/spinner";
+
+const CodeBlock = React.lazy(() =>
+  import("./ui/codeblock").then((m) => ({ default: m.CodeBlock })),
+);
 
 export function Exporter() {
   const { hoverProps, isHovered } = useHover({});
@@ -25,7 +29,7 @@ export function Exporter() {
       <DialogTrigger
         render={
           <Button {...hoverProps} variant="ghost">
-            Export
+            Export Theme
             <DownloadIcon data-icon="inline-end" animate={isHovered} />
           </Button>
         }
@@ -44,10 +48,14 @@ export function Exporter() {
             <TabsIndicator />
           </TabsList>
           <TabsContent value="css">
-            <CodeBlock code={cssString} />
+            <Suspense fallback={<Spinner />}>
+              <CodeBlock code={cssString} />
+            </Suspense>
           </TabsContent>
           <TabsContent value="tailwindcss">
-            <CodeBlock code={tailwindString} />
+            <Suspense fallback={<Spinner />}>
+              <CodeBlock code={tailwindString} />
+            </Suspense>
           </TabsContent>
           <TabsContent value="shadcn">Coming soon</TabsContent>
         </Tabs>

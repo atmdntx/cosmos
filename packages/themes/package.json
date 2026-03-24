@@ -1,7 +1,7 @@
 {
   "name": "@cosmos/themes",
   "version": "0.0.0",
-  "description": "A starter for creating a TypeScript package.",
+  "description": "Theme token generator for Cosmos",
   "homepage": "https://github.com/author/library#readme",
   "bugs": {
     "url": "https://github.com/author/library/issues"

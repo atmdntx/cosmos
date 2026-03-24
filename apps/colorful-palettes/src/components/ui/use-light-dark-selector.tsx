@@ -6,7 +6,7 @@ export function LightDarkSelector() {
   const useLightDark = useColorfulStore.use.useLightDark();
   const setUseLightDark = useColorfulStore.use.setUseLightDark();
   return (
-    <FieldLabel htmlFor="light-dark">
+    <FieldLabel htmlFor="light-dark" className="bg-background">
       <Field orientation="horizontal">
         <FieldContent>
           <FieldTitle>Use light-dark()</FieldTitle>

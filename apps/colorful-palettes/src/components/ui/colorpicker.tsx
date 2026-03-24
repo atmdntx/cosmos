@@ -161,7 +161,7 @@ function ColorPicker(props: ColorPickerProps) {
   return (
     <Field className="gap-1">
       <FieldLabel className="text-xs font-semibold text-muted-foreground">Base color</FieldLabel>
-      <InputGroup className="flex items-center">
+      <InputGroup className="flex items-center bg-background">
         <ColorField
           autoFocus={false}
           aria-label="Color picker"

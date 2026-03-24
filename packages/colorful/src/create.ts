@@ -2,9 +2,9 @@ import Color from "colorjs.io";
 import type {
   ColorfulShade,
   ContrastType,
-  ExtendedTailwindPalette,
   Mode,
   TailwindColorScale,
+  TailwindPalette,
 } from "./types";
 import { clamp } from "./utils";
 import { BLACK, MIN_APCA_CONTRAST, MIN_WCAG_CONTRAST, WHITE } from "./constants";
@@ -24,11 +24,6 @@ export function createShade(inputColor: Color, baseColor: Color, mode?: Mode) {
   return new Color("oklch", [lightness, chroma, hue]);
 }
 
-interface ContrastCandidate {
-  color: Color;
-  contrast: number;
-}
-
 /**
  * Convierte un color generado en la representación completa (`ColorfulShade`)
  * calculando contrastes, formatos (hex/rgb/p3, etc.) y metadatos asociados.
@@ -37,20 +32,19 @@ export function createShadeObject(
   inputColor: Color,
   number: TailwindColorScale,
   candidates: Color[],
-  contrastMode: ContrastType = "APCA",
+  contrastMode: ContrastType = "WCAG21",
 ): ColorfulShade {
   const MIN_CONTRAST = contrastMode === "APCA" ? MIN_APCA_CONTRAST : MIN_WCAG_CONTRAST;
-  const sortedCandidates: ContrastCandidate[] = candidates
-    .map((color) => ({ color, contrast: Math.abs(inputColor.contrast(color, contrastMode)) }))
-    .sort((a, b) => a.contrast - b.contrast);
 
-  let bestContrastColor: Color | undefined;
-  let usesFallbackContrast = false;
+  let bestContrastColor: Color | undefined,
+    bestContrastValue = Infinity,
+    usesFallbackContrast = false;
 
-  for (const { color, contrast } of sortedCandidates) {
-    if (contrast >= MIN_CONTRAST) {
+  for (const color of candidates) {
+    const contrast = Math.abs(inputColor.contrast(color, contrastMode));
+    if (contrast >= MIN_CONTRAST && contrast < bestContrastValue) {
+      bestContrastValue = contrast;
       bestContrastColor = color;
-      break;
     }
   }
 
@@ -60,26 +54,32 @@ export function createShadeObject(
 
     bestContrastColor = contrastWhite > contrastBlack ? WHITE : BLACK;
     usesFallbackContrast = true;
+    bestContrastValue = Math.max(contrastWhite, contrastBlack);
   }
-  const contrastValue = Math.abs(inputColor.contrast(bestContrastColor, contrastMode));
-  const contrast = bestContrastColor.to("oklch").toString({ format: "oklch" });
+  const contrastValue = bestContrastValue;
   const meetsContrast = contrastValue >= MIN_CONTRAST;
+
+  const colorClone = inputColor.clone();
+  const srgb = inputColor.clone().to("srgb");
+  const oklch = inputColor.clone().to("oklch");
+  const hsl = inputColor.clone().to("hsl");
+  const p3 = inputColor.clone().to("p3");
 
   return {
     number,
-    color: inputColor.clone(),
+    color: colorClone,
     contrast: {
-      color: new Color(contrast),
+      color: bestContrastColor.clone(),
       contrastRatio: contrastValue,
       meetsContrast,
       usesFallbackContrast,
     },
     exports: {
-      hex: inputColor.clone().to("srgb").toString({ format: "hex" }),
-      oklch: inputColor.clone().to("oklch").toString({ format: "oklch" }),
-      hsl: inputColor.clone().to("hsl").toString({ format: "hsl" }),
-      p3: inputColor.clone().to("p3").toString({ format: "p3" }),
-      srgb: inputColor.clone().to("srgb").toString({ format: "srgb" }),
+      hex: srgb.toString({ format: "hex" }),
+      srgb: srgb.toString({ format: "srgb" }),
+      oklch: oklch.toString({ format: "oklch" }),
+      hsl: hsl.toString({ format: "hsl" }),
+      p3: p3.toString({ format: "p3" }),
     },
   };
 }
@@ -97,20 +97,23 @@ interface CreatePaletteOptions {
  */
 export function createBasePalette(
   inputColor: Color,
-  referencePalette: ExtendedTailwindPalette,
+  referencePalette: TailwindPalette,
   options: CreatePaletteOptions = {},
 ): ColorfulShade[] {
-  const { mode, contrastMode = "APCA" } = options;
+  const { mode, contrastMode = "WCAG21" } = options;
+  const numbers: TailwindColorScale[] = [];
+  const colors: Color[] = [];
 
-  const generatedShades = referencePalette.shades.map((shade) => {
+  for (const shade of referencePalette.shades) {
     const shadeColor = new Color(shade.color);
     const createdShadeColor = createShade(shadeColor, inputColor, mode) as Color;
-    return { number: shade.number, color: createdShadeColor };
-  });
+    numbers.push(shade.number);
+    colors.push(createdShadeColor);
+  }
 
-  const allShades = generatedShades.map((s) => s.color);
-
-  return generatedShades.map((item) => {
-    return createShadeObject(item.color, item.number, allShades, contrastMode);
-  });
+  const output: ColorfulShade[] = [];
+  for (let i = 0; i < colors.length; i++) {
+    output.push(createShadeObject(colors[i], numbers[i], colors, contrastMode));
+  }
+  return output;
 }

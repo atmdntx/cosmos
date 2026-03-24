@@ -1,35 +1,32 @@
 import type { ColorfulPalette } from "@cosmos/colorful";
-import { useId, useMemo, type ComponentProps } from "react";
+import { type ComponentProps } from "react";
 import { ColorSwatch } from "./colorpicker";
-import { Field, FieldLabel } from "./field";
-import { useLocale } from "react-aria";
-import { parseColor } from "react-stately";
+import { Card, CardAction, CardHeader, CardTitle } from "./card";
+import { Badge } from "./badge";
 
 interface PaletteProps<T> extends ComponentProps<"div"> {
   palette: T;
-  name: string;
+  label: string;
 }
-export function Palette<T extends ColorfulPalette>({ palette, name, ...props }: PaletteProps<T>) {
-  const id = useId();
-  const mainColor = useMemo(() => palette.shades.find((shade) => shade.number === 500), []);
-  const { locale } = useLocale();
-  const colorName = parseColor(
-    mainColor!.color.to("srgb").toString({ format: "hex" }),
-  ).getColorName(locale);
+export function Palette<T extends ColorfulPalette>({ palette, label, ...props }: PaletteProps<T>) {
   return (
-    <Field {...props}>
-      <FieldLabel htmlFor={`${id}-${name}`}>{colorName}</FieldLabel>
-      <output id={`${id}-${name}`} className="flex gap-1 w-full flex-wrap">
+    <Card {...props} className="relative pt-0 ring-0 shadow">
+      <output className="flex relative z-20 aspect-video m-2 mb-0 rounded-xl overflow-hidden">
         {palette.shades.map((shade) => (
           <ColorSwatch
             key={shade.number}
-            className="relative h-5 w-8 xl:w-12 xl:h-6 *:rounded"
-            showInfo
+            className="relative h-full w-auto flex-1"
             shade={shade}
             color={shade.color.toString({ format: "hex" })}
           ></ColorSwatch>
         ))}
       </output>
-    </Field>
+      <CardHeader>
+        <CardAction>
+          <Badge variant="secondary">{label}</Badge>
+        </CardAction>
+        <CardTitle className="font-semibold">{palette.name}</CardTitle>
+      </CardHeader>
+    </Card>
   );
 }

@@ -1,5 +1,11 @@
 import Color from "colorjs.io";
-import type { ColorfulColorScheme, ColorfulPalette, ColorfulShade, ColorScheme } from "./types";
+import type {
+  ColorfulColorScheme,
+  ColorfulPalette,
+  ColorfulShade,
+  ColorScheme,
+  ContrastType,
+} from "./types";
 import type { ColorTypes } from "colorjs.io";
 import { clamp, getElementByKey } from "./utils";
 import { COLORFUL_COLOR_SCHEMES } from "./color-schemes";
@@ -14,13 +20,28 @@ import { createBasePalette, createShadeObject } from "./create";
  * (primario, secundario, etc.) y memoriza los cálculos costosos cuando es
  * necesario.
  */
+
+interface ColorfulPaletteCreatorOptions {
+  contrastMode?: ContrastType;
+}
+
 export class ColorfulPaletteCreator {
   #inputColor: Color;
   #colorScheme: ColorfulColorScheme;
-  #neutralCache?: { baseColor: Color; shades: ColorfulShade[] };
-  #grayCache?: { baseColor: Color; shades: ColorfulShade[] };
-  constructor(inputColor: ColorTypes, colorScheme: ColorScheme = "default") {
+  #contrastMode: ContrastType;
+  #primaryCache?: ColorfulPalette;
+  #secondaryCache?: ColorfulPalette;
+  #tertiaryCache?: ColorfulPalette;
+  #errorCache?: ColorfulPalette;
+  #neutralCache?: { baseColor: Color; shades: ColorfulShade[]; palette: ColorfulPalette };
+  #grayCache?: { baseColor: Color; shades: ColorfulShade[]; palette: ColorfulPalette };
+  constructor(
+    inputColor: ColorTypes,
+    colorScheme: ColorScheme = "default",
+    options: ColorfulPaletteCreatorOptions = {},
+  ) {
     this.#inputColor = this.#normalizeColor(inputColor) as Color;
+    this.#contrastMode = options.contrastMode ?? "WCAG21";
     this.#colorScheme = getElementByKey(
       colorScheme.trim(),
       COLORFUL_COLOR_SCHEMES,
@@ -31,29 +52,40 @@ export class ColorfulPaletteCreator {
    * Paleta principal derivada del color de entrada y transformaciones del esquema.
    */
   get primaryPalette() {
+    if (this.#primaryCache) return this.#primaryCache;
     const baseColor = applyRoleTransform(this.#inputColor.clone(), this.#colorScheme.roles.primary);
     const closestPalette = this.#getClosestPalette(baseColor);
-    const basePalette = createBasePalette(baseColor, closestPalette);
-    return this.#assemblePalette(baseColor, basePalette);
+    const basePalette = createBasePalette(baseColor, closestPalette, {
+      contrastMode: this.#contrastMode,
+    });
+    const palette = this.#assemblePalette(baseColor, basePalette);
+    this.#primaryCache = palette;
+    return palette;
   }
 
   /**
    * Variante secundaria que ajusta tono/croma antes de generar los tonos base.
    */
   get secondaryPalette() {
+    if (this.#secondaryCache) return this.#secondaryCache;
     const baseColor = applyRoleTransform(
       this.#inputColor.clone(),
       this.#colorScheme.roles.secondary,
     );
     const closestPalette = this.#getClosestPalette(baseColor);
-    const basePalette = createBasePalette(baseColor, closestPalette);
-    return this.#assemblePalette(baseColor, basePalette);
+    const basePalette = createBasePalette(baseColor, closestPalette, {
+      contrastMode: this.#contrastMode,
+    });
+    const palette = this.#assemblePalette(baseColor, basePalette);
+    this.#secondaryCache = palette;
+    return palette;
   }
 
   /**
    * Variante terciaria que aplica una transformación adicional para contrastes.
    */
   get tertiaryPalette() {
+    if (this.#tertiaryCache) return this.#tertiaryCache;
     const baseColor = applyRoleTransform(
       this.#inputColor.clone(),
       this.#colorScheme.roles.tertiary,
@@ -73,11 +105,14 @@ export class ColorfulPaletteCreator {
         this.#colorScheme.roles.neutral,
       );
       const closestPalette = this.#getClosestNeutralPalette(baseColor);
-      const basePalette = createBasePalette(baseColor, closestPalette);
-      this.#neutralCache = { baseColor, shades: basePalette };
+      const basePalette = createBasePalette(baseColor, closestPalette, {
+        contrastMode: this.#contrastMode,
+      });
+      const palette = this.#assemblePalette(baseColor, basePalette);
+      this.#neutralCache = { baseColor, shades: basePalette, palette };
     }
-    const { baseColor, shades } = this.#neutralCache;
-    return this.#assemblePalette(baseColor, shades);
+
+    return this.#neutralCache.palette;
   }
 
   /**
@@ -92,21 +127,27 @@ export class ColorfulPaletteCreator {
           return this.#neutralCache!;
         })();
       const baseColor = applyRoleTransform(this.#inputColor.clone(), this.#colorScheme.roles.gray);
-      const shades = this.#deriveGrayPalette(neutralCache.shades);
-      this.#grayCache = { baseColor, shades };
+      const shades = this.#deriveGrayPalette(neutralCache.shades, this.#contrastMode);
+      const palette = this.#assemblePalette(baseColor, shades);
+      this.#grayCache = { baseColor, shades, palette };
     }
-    const { baseColor, shades } = this.#grayCache;
-    return this.#assemblePalette(baseColor, shades);
+    return this.#grayCache.palette;
   }
 
   /**
    * Paleta de error; enfatiza el rojo respetando el esquema activo.
    */
   get errorPalette() {
+    if (this.#errorCache) return this.#errorCache;
     const baseColor = applyRoleTransform(this.#inputColor.clone(), this.#colorScheme.roles.error);
     const closestPalette = this.#getClosestErrorPalette(baseColor);
-    const basePalette = createBasePalette(baseColor, closestPalette, { mode: "error" });
-    return this.#assemblePalette(baseColor, basePalette);
+    const basePalette = createBasePalette(baseColor, closestPalette, {
+      mode: "error",
+      contrastMode: this.#contrastMode,
+    });
+    const palette = this.#assemblePalette(baseColor, basePalette);
+    this.#errorCache = palette;
+    return palette;
   }
 
   /**
@@ -146,18 +187,18 @@ export class ColorfulPaletteCreator {
   /**
    * Deriva la paleta gris suavizando croma y elevando ligeramente la luminancia.
    */
-  #deriveGrayPalette(neutralShades: ColorfulShade[]): ColorfulShade[] {
-    const derivedShades = neutralShades.map((shade) => {
+  #deriveGrayPalette(neutralShades: ColorfulShade[], contrastMode: ContrastType): ColorfulShade[] {
+    const numbers = neutralShades.map((s) => s.number);
+    const colors: Color[] = [];
+    for (const shade of neutralShades) {
       const { l, c, h } = shade.color.oklch;
       const baseL = l ?? 0;
       const baseC = c ?? 0;
       const baseH = h ?? 0;
       const derivedL = clamp(baseL + (1 - baseL) * 0.02, 0, 1);
-      const derivedColor = new Color("oklch", [derivedL, Math.min(baseC * 0.15, 0.04), baseH]);
-      return { color: derivedColor, number: shade.number };
-    });
-    const candidates = derivedShades.map((entry) => entry.color);
-    return derivedShades.map((entry) => createShadeObject(entry.color, entry.number, candidates));
+      colors.push(new Color("oklch", [derivedL, Math.min(baseC * 0.15, 0.04), baseH]));
+    }
+    return colors.map((color, i) => createShadeObject(color, numbers[i]!, colors, contrastMode));
   }
 
   /**

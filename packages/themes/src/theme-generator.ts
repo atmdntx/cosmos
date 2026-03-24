@@ -25,6 +25,13 @@ interface ResolvedToken {
   dark: string;
 }
 
+interface ShadeEntry {
+  color: string;
+  contrast: string;
+}
+
+type PaletteShadeMap = Map<number, ShadeEntry>;
+
 export class ThemeGenerator<T> {
   #paletteCreator: colorfulPaletteCreator;
   #tokens: ThemeConfig<T>[];
@@ -32,8 +39,11 @@ export class ThemeGenerator<T> {
   #selector: string | undefined;
   #darkSelector: string | undefined;
   #useLightDark: boolean;
-  #cache = new Map<PaletteTypes, ColorfulPalette>();
+
+  #paletteCache = new Map<PaletteTypes, ColorfulPalette>();
+  #paletteShadeMapCache = new Map<PaletteTypes, PaletteShadeMap>();
   #resolvedTokens: ResolvedToken[] | undefined;
+  #specialColorCache: { black: string; white: string } | undefined;
 
   constructor(inputColor: ColorTypes, options: ThemeGeneratorOptions<T> = {}) {
     const {
@@ -113,31 +123,94 @@ export class ThemeGenerator<T> {
   }
 
   #getTokenValue(value: ThemeToken): string {
-    const shadeValue = value.number;
-    const palette = this.#getPalette(value.palette);
-    const colorFormat = this.#colorFormat === "hex" ? "srgb" : this.#colorFormat;
-    if (shadeValue === 0 || shadeValue === 1000) {
-      const blackString = BLACK.to(colorFormat).toString({ format: this.#colorFormat });
-      const whiteString = WHITE.to(colorFormat).toString({ format: this.#colorFormat });
-
-      if (shadeValue === 0) {
-        return value.useContrast ? blackString : whiteString;
-      }
-      if (shadeValue === 1000) {
-        return value.useContrast ? whiteString : blackString;
-      }
+    const { black, white } = this.#getSpecialColors();
+    if (value.number === 0) {
+      return value.useContrast ? black : white;
     }
-    const shade = palette.shades.find((shade) => shade.number === shadeValue);
-    return value.useContrast
-      ? shade!.contrast.color.to(colorFormat).toString({ format: this.#colorFormat })
-      : shade!.color.to(colorFormat).toString({ format: this.#colorFormat });
+    if (value.number === 1000) {
+      return value.useContrast ? white : black;
+    }
+
+    const shadeMap = this.#getPaletteShadeMap(value.palette);
+    const shade = shadeMap.get(value.number);
+
+    if (!shade) {
+      throw new Error(`Shade ${value.number} not found in palette "${value.palette}"`);
+    }
+    return value.useContrast ? shade.contrast : shade.color;
+  }
+
+  #getSpecialColors() {
+    if (this.#specialColorCache) return this.#specialColorCache;
+
+    const colorFormat = this.#colorFormat === "hex" ? "srgb" : this.#colorFormat;
+
+    this.#specialColorCache = {
+      black: BLACK.to(colorFormat).toString({ format: this.#colorFormat }),
+      white: WHITE.to(colorFormat).toString({ format: this.#colorFormat }),
+    };
+    return this.#specialColorCache;
+  }
+
+  #getPaletteShadeMap(type: PaletteTypes): PaletteShadeMap {
+    const cached = this.#paletteShadeMapCache.get(type);
+    if (cached) return cached;
+
+    const palette = this.#getPalette(type);
+    const colorFormat = this.#colorFormat === "hex" ? "srgb" : this.#colorFormat;
+
+    const map: PaletteShadeMap = new Map();
+
+    for (const shade of palette.shades) {
+      map.set(shade.number, {
+        color: shade.color.to(colorFormat).toString({ format: this.#colorFormat }),
+        contrast: shade.contrast.color.to(colorFormat).toString({ format: this.#colorFormat }),
+      });
+    }
+    this.#paletteShadeMapCache.set(type, map);
+    return map;
+  }
+
+  get primaryPalette() {
+    return this.#getPalette("primary");
+  }
+  get secondaryPalette() {
+    return this.#getPalette("secondary");
+  }
+
+  get tertiaryPalette() {
+    return this.#getPalette("tertiary");
+  }
+
+  get neutralPalette() {
+    return this.#getPalette("neutral");
+  }
+
+  get grayPalette() {
+    return this.#getPalette("gray");
+  }
+
+  get errorPalette() {
+    return this.#getPalette("error");
+  }
+
+  get colorfulPalettes() {
+    return {
+      primaryPalette: this.primaryPalette,
+      secondaryPalette: this.secondaryPalette,
+      tertiaryPalette: this.tertiaryPalette,
+      neutralPalette: this.neutralPalette,
+      grayPalette: this.grayPalette,
+      errorPalette: this.errorPalette,
+    };
   }
 
   #getPalette(type: PaletteTypes): ColorfulPalette {
-    if (!this.#cache.has(type)) {
-      this.#cache.set(type, this.#resolvedPalette(type));
-    }
-    return this.#cache.get(type)!;
+    const cached = this.#paletteCache.get(type);
+    if (cached) return cached;
+    const resolved = this.#resolvedPalette(type);
+    this.#paletteCache.set(type, resolved);
+    return resolved;
   }
 
   #resolvedPalette(type: PaletteTypes): ColorfulPalette {

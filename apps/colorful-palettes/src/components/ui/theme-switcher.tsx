@@ -19,12 +19,8 @@ export function ThemeSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button
-            {...hoverProps}
-            size="icon"
-            variant="ghost"
-            data-label={`Current theme: ${themeMode}`}
-          >
+          <Button {...hoverProps} size="icon" variant="ghost">
+            <span className="sr-only">Change theme</span>
             {themeMode === "dark" ? (
               <MoonIcon animate={isHovered} />
             ) : themeMode === "light" ? (
