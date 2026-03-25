@@ -8,6 +8,7 @@
   "aria_loading": "Cargando",
   "brand_name": "ColorfulPalettes",
   "coming_soon": "Muy pronto",
+  "copy_palette": "Copiar colores",
   "description_light_dark": "Funci\u00f3n CSS que cambia los colores seg\u00fan el esquema del sistema.",
   "devtools_plugin_tanstack_router": "Tanstack Router",
   "error_clipboard_read": "La lectura del portapapeles no es compatible en este contexto.",

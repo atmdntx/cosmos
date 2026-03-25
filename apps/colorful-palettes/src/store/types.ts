@@ -46,7 +46,19 @@ export interface ThemeSlice {
   setDarkSelector: (darkSelector?: string) => void;
 }
 
-export type ColorfulStore = ThemeOptionsSlice & ThemeGeneratorSlice & ThemeSlice & ThemeStringSlice;
+export type Preset = ThemeOptionsSlice;
+
+export interface ThemePresetSlice {
+  shareableUrl: string;
+  encodePreset: () => void;
+  decodePreset: (preset: string) => void;
+}
+
+export type ColorfulStore = ThemeOptionsSlice &
+  ThemeGeneratorSlice &
+  ThemeSlice &
+  ThemeStringSlice &
+  ThemePresetSlice;
 
 export type WithSelectors<S> = S extends { getState: () => infer T }
   ? S & { use: { [K in keyof T]: () => T[K] } }

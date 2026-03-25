@@ -39,6 +39,9 @@ catalogs:
     input-otp:
       specifier: ^1.4.2
       version: 1.4.2
+    lz-string:
+      specifier: ^1.5.0
+      version: 1.5.0
     motion:
       specifier: ^12.38.0
       version: 12.38.0
@@ -165,6 +168,9 @@ importers:
       lucide-react:
         specifier: ^0.545.0
         version: 0.545.0(react@19.2.4)
+      lz-string:
+        specifier: 'catalog:'
+        version: 1.5.0
       motion:
         specifier: 'catalog:'
         version: 12.38.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)

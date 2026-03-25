@@ -11,6 +11,7 @@ import {
   type AriaColorSwatchProps,
 } from "react-aria";
 import {
+  parseColor,
   useColorAreaState,
   useColorFieldState,
   useColorPickerState,
@@ -120,8 +121,9 @@ function ColorSlider(props: AriaColorSliderProps) {
 
 function ColorPicker(props: ColorPickerProps) {
   const colorPickerState = useColorPickerState(props);
-  const { color } = colorPickerState;
+  const inputColor = useColorfulStore.use.inputColor();
   const setInputColor = useColorfulStore.use.setInputColor();
+
   return (
     <Field className="gap-1">
       <FieldLabel className="text-xs font-semibold text-muted-foreground">
@@ -131,7 +133,7 @@ function ColorPicker(props: ColorPickerProps) {
         <ColorField
           autoFocus={false}
           aria-label={m.aria_color_picker()}
-          value={color}
+          value={colorPickerState.color}
           onChange={(e) => {
             colorPickerState.setColor(e);
             setInputColor(String(e));
@@ -146,7 +148,7 @@ function ColorPicker(props: ColorPickerProps) {
                   size="icon-xs"
                   variant="ghost"
                 >
-                  <ColorSwatch color={color} />
+                  <ColorSwatch color={parseColor(inputColor)} />
                 </InputGroupButton>
               }
             ></PopoverTrigger>
@@ -155,13 +157,13 @@ function ColorPicker(props: ColorPickerProps) {
                 colorSpace="hsl"
                 xChannel="saturation"
                 yChannel="lightness"
-                value={color}
+                value={colorPickerState.color}
                 onChange={(e) => colorPickerState.setColor(e)}
                 onChangeEnd={(e) => setInputColor(String(e))}
               />
               <div className="flex flex-col gap-2">
                 <ColorSlider
-                  value={color}
+                  value={colorPickerState.color}
                   onChange={(e) => colorPickerState.setColor(e)}
                   onChangeEnd={(e) => setInputColor(String(e))}
                   colorSpace="hsl"

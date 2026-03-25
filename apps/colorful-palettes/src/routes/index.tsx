@@ -8,11 +8,34 @@ import { ColorSchemeSelector } from "#/components/ui/color-scheme-selector";
 import { PaletteExplorer } from "#/components/palette-explorer";
 import { AppVisualizer } from "#/components/app-visualizer";
 import { useColorfulStore } from "#/store/store";
+import { useEffect } from "react";
 
-export const Route = createFileRoute("/")({ component: App });
+type PresetParams = {
+  preset?: string;
+};
+
+export const Route = createFileRoute("/")({
+  component: App,
+  validateSearch: (search: Record<string, unknown>): PresetParams => {
+    const presetParam = typeof search.preset === "string" ? search.preset : "";
+    return presetParam ? { preset: presetParam } : {};
+  },
+});
 
 function App() {
   const inputColor = useColorfulStore.use.inputColor();
+  const decodePreset = useColorfulStore.use.decodePreset();
+  const { preset } = Route.useSearch();
+  const navigate = Route.useNavigate();
+
+  useEffect(() => {
+    if (!preset) return;
+    decodePreset(preset);
+    void navigate({
+      replace: true,
+      search: (prev) => ({ ...prev, preset: undefined }),
+    });
+  }, [preset, decodePreset, navigate]);
   return (
     <main className="flex min-h-0 flex-1 flex-col gap-6 pt-3 p-6 md:flex-row-reverse">
       <AppVisualizer>

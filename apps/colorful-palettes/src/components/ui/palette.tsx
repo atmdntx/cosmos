@@ -113,7 +113,7 @@ export function Palette<T extends ColorfulPalette>({
           {codeString && (
             <DrawerFooter>
               <CopyButton variant="default" size="default" copyContent={codeString}>
-                Copy Code
+                {m.copy_palette()}
               </CopyButton>
             </DrawerFooter>
           )}

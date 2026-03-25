@@ -61,7 +61,6 @@ export const Route = createRootRouteWithContext()({
 function RootDocument({ children }: { children: React.ReactNode }) {
   const htmlClass = useHtmlClass();
   const regenerate = useColorfulStore((state) => state.regenerate);
-
   useEffect(() => {
     regenerate();
   }, [regenerate]);

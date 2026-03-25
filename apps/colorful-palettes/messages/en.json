@@ -8,6 +8,7 @@
   "aria_loading": "Loading",
   "brand_name": "ColorfulPalettes",
   "coming_soon": "Coming soon",
+  "copy_palette": "Copy colors",
   "description_light_dark": "CSS function that switches colors based on system color-scheme.",
   "devtools_plugin_tanstack_router": "Tanstack Router",
   "error_clipboard_read": "Clipboard read is not supported in this context.",
