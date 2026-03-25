@@ -8,6 +8,7 @@ import { TooltipProvider } from "#/components/ui/tooltip";
 import { THEME_COLORS, ThemeProvider, useHtmlClass } from "#/components/ui/theme-provider";
 import { useColorfulStore } from "#/store/store";
 import { useEffect } from "react";
+import { getLocale } from "#/paraglide/runtime";
 
 export const Route = createRootRouteWithContext()({
   head: () => ({
@@ -30,7 +31,7 @@ export const Route = createRootRouteWithContext()({
         media: "(prefers-color-scheme: dark)",
       },
       {
-        title: "TanStack Start Starter",
+        title: "Colorful Palettes",
       },
     ],
     links: [
@@ -65,7 +66,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   }, [regenerate]);
 
   return (
-    <html lang="en" className={htmlClass} suppressHydrationWarning>
+    <html lang={getLocale()} className={htmlClass} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>

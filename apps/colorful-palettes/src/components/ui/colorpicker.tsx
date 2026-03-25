@@ -1,4 +1,4 @@
-import { useId, useRef, type CSSProperties } from "react";
+import { useRef, type CSSProperties, type ReactEventHandler } from "react";
 import {
   useColorArea,
   useColorField,
@@ -17,14 +17,13 @@ import {
   useColorSliderState,
   type ColorPickerProps,
 } from "react-stately";
+
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { cn } from "#/lib/utils";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "./input-group";
 
 import { Field, FieldLabel } from "./field";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "./hover-card";
 import type { ColorfulShade } from "@cosmos/colorful";
-import { CopyButton } from "./copybutton";
 import { useColorfulStore } from "#/store/store";
 
 function ColorArea(props: AriaColorAreaProps) {
@@ -64,59 +63,22 @@ interface ColorSwatchProps extends AriaColorSwatchProps {
   style?: CSSProperties;
   showInfo?: boolean | "minimal";
   shade?: ColorfulShade;
+  children?: React.ReactNode;
+  onClick?: ReactEventHandler;
 }
 function ColorSwatch(props: ColorSwatchProps) {
-  const { className, style, showInfo, shade } = props;
+  const { className, style } = props;
   const { colorSwatchProps } = useColorSwatch(props);
-  const colorFormat = useColorfulStore.use.colorFormat();
-  const colorOutputId = useId();
-  const contrastOutputId = useId();
-  if (typeof showInfo === "boolean" && Boolean(showInfo)) {
-    return (
-      <HoverCard>
-        <HoverCardTrigger delay={0} closeDelay={0} className={className} style={{ ...style }}>
-          <div className="absolute inset-0" {...colorSwatchProps} />
-        </HoverCardTrigger>
-        <HoverCardContent className="flex flex-col gap-2">
-          <div
-            className="relative h-16 w-full grid place-items-center rounded-md font-semibold text-lg"
-            style={{
-              backgroundColor: shade!.color.to("oklch").toString(),
-              color: shade!.contrast.color.to("oklch").toString(),
-            }}
-          >
-            {shade!.number}
-            <CopyButton
-              variant="ghost"
-              size="icon-xs"
-              className="absolute bottom-1 right-1"
-              copyContent={shade!.color
-                .to(colorFormat === "hex" ? "srgb" : colorFormat)
-                .toString({ format: colorFormat })}
-            />
-          </div>
-          <Field className="gap-0">
-            <FieldLabel htmlFor={colorOutputId}>Color</FieldLabel>
-            <output className="text-muted-foreground" id={colorOutputId} aria-live="polite">
-              {shade!.color
-                .to(colorFormat === "hex" ? "srgb" : colorFormat)
-                .toString({ format: colorFormat })}
-            </output>
-          </Field>
-          <Field className="gap-0">
-            <FieldLabel htmlFor={contrastOutputId}>Contrast Color</FieldLabel>
-            <output className="text-muted-foreground" id={contrastOutputId} aria-live="polite">
-              {shade!.contrast.color
-                .to(colorFormat === "hex" ? "srgb" : colorFormat)
-                .toString({ format: colorFormat })}
-            </output>
-          </Field>
-        </HoverCardContent>
-      </HoverCard>
-    );
-  }
+
   return (
-    <div className={cn("absolute inset-0", className)} style={{ ...style }} {...colorSwatchProps} />
+    <div
+      onClick={(e) => props.onClick?.(e)}
+      className={cn("w-[inherit] h-[inherit]", className)}
+      {...colorSwatchProps}
+      style={{ ...colorSwatchProps.style, ...style }}
+    >
+      {props.children}
+    </div>
   );
 }
 

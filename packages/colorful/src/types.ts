@@ -66,6 +66,7 @@ export interface ColorfulShadeContrast {
   contrastRatio: number;
   meetsContrast: boolean;
   usesFallbackContrast: boolean;
+  exports: ColorfulShadeExports;
 }
 
 type ColorFormat = "hex" | "hsl" | "oklch" | "p3" | "srgb";

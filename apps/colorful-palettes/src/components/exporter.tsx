@@ -6,6 +6,7 @@ import { DownloadIcon } from "./ui/download";
 import { Tabs, TabsContent, TabsIndicator, TabsList, TabsTrigger } from "./ui/tabs";
 import { Spinner } from "./ui/spinner";
 import { useColorfulStore } from "#/store/store";
+import { m } from "@/paraglide/messages";
 
 const CodeBlock = React.lazy(() =>
   import("./ui/codeblock").then((m) => ({ default: m.CodeBlock })),
@@ -20,14 +21,14 @@ export function Exporter() {
       <DialogTrigger
         render={
           <Button {...hoverProps} variant="ghost">
-            Export Theme
+            {m.export_theme()}
             <DownloadIcon data-icon="inline-end" animate={isHovered} />
           </Button>
         }
       />
       <DialogContent className="sm:max-w-[calc(100%-2rem)] lg:max-w-max">
         <DialogHeader>
-          <DialogTitle>Export</DialogTitle>
+          <DialogTitle>{m.export()}</DialogTitle>
         </DialogHeader>
         <Tabs defaultValue="css" className="overflow-hidden no-scrollbar">
           <TabsList>

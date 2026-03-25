@@ -9,6 +9,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { SendIcon } from "./ui/send";
+import { m } from "@/paraglide/messages";
 
 export function LinkShare() {
   const { hoverProps, isHovered } = useHover({});
@@ -17,14 +18,14 @@ export function LinkShare() {
       <DialogTrigger
         render={
           <Button {...hoverProps} variant="ghost">
-            Share Link
+            {m.share_link()}
             <SendIcon data-icon="inline-end" animate={isHovered} />
           </Button>
         }
       />
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Share Link</DialogTitle>
+          <DialogTitle>{m.share_link()}</DialogTitle>
           <DialogDescription>Bla bla bla bla</DialogDescription>
         </DialogHeader>
       </DialogContent>

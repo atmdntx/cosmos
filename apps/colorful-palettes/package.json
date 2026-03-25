@@ -15,6 +15,7 @@
     "@base-ui/react": "catalog:",
     "@cosmos/colorful": "workspace:*",
     "@cosmos/themes": "workspace:*",
+    "@fontsource-variable/geist": "catalog:",
     "@fontsource-variable/noto-sans": "catalog:",
     "@fontsource-variable/raleway": "catalog:",
     "@tailwindcss/vite": "^4.1.18",

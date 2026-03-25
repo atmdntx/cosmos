@@ -65,14 +65,27 @@ export function createShadeObject(
   const hsl = inputColor.clone().to("hsl");
   const p3 = inputColor.clone().to("p3");
 
+  const bestContrastColorClone = bestContrastColor.clone();
+  const contrastSrgb = bestContrastColor.clone().to("srgb");
+  const contrastOklch = bestContrastColor.clone().to("oklch");
+  const contrastHsl = bestContrastColor.clone().to("hsl");
+  const contrastP3 = bestContrastColor.clone().to("p3");
+
   return {
     number,
     color: colorClone,
     contrast: {
-      color: bestContrastColor.clone(),
+      color: bestContrastColorClone,
       contrastRatio: contrastValue,
       meetsContrast,
       usesFallbackContrast,
+      exports: {
+        hex: contrastSrgb.toString({ format: "hex" }),
+        srgb: contrastSrgb.toString({ format: "srgb" }),
+        oklch: contrastOklch.toString({ format: "oklch" }),
+        hsl: contrastHsl.toString({ format: "hsl" }),
+        p3: contrastP3.toString({ format: "p3" }),
+      },
     },
     exports: {
       hex: srgb.toString({ format: "hex" }),
