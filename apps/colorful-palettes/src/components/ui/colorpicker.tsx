@@ -133,7 +133,7 @@ function ColorPicker(props: ColorPickerProps) {
         <ColorField
           autoFocus={false}
           aria-label={m.aria_color_picker()}
-          value={colorPickerState.color}
+          value={inputColor}
           onChange={(e) => {
             colorPickerState.setColor(e);
             setInputColor(String(e));
