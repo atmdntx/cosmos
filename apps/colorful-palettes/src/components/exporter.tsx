@@ -23,8 +23,21 @@ export function Exporter() {
   const { hoverProps, isHovered } = useHover({});
   const cssString = useColorfulStore.use.cssString();
   const tailwindString = useColorfulStore.use.tailwindString();
+  const buildStrings = useColorfulStore.use.buildStrings();
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  const handleOpenChange = React.useCallback(
+    (open: boolean) => {
+      if (open) {
+        buildStrings();
+      }
+      setIsOpen(open);
+    },
+    [buildStrings],
+  );
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger
         render={
           <Button {...hoverProps} variant="ghost">

@@ -34,6 +34,7 @@ export interface ThemeStringSlice {
   neutralString: string;
   grayString: string;
   buildStrings: () => void;
+  resetStrings: () => void;
 }
 
 export interface ThemeSlice {

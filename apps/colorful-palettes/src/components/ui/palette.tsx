@@ -1,5 +1,5 @@
 import type { ColorfulPalette, ColorfulShade } from "@cosmos/colorful";
-import { type ComponentProps } from "react";
+import { type ComponentProps, useCallback, useState } from "react";
 import { ColorSwatch } from "./colorpicker";
 import { Card, CardAction, CardDescription, CardHeader, CardTitle } from "./card";
 import { Badge } from "./badge";
@@ -78,9 +78,23 @@ export function Palette<T extends ColorfulPalette>({
   ...props
 }: PaletteProps<T>) {
   const { hoverProps, isHovered } = useHover({});
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const buildStrings = useColorfulStore.use.buildStrings();
+  const shouldBuildStrings = typeof codeString !== "undefined";
+
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      if (open && shouldBuildStrings) {
+        buildStrings();
+      }
+      setIsDrawerOpen(open);
+    },
+    [buildStrings, shouldBuildStrings],
+  );
+
   return (
     <Card {...props} className="relative pt-0 ring-0 shadow">
-      <Drawer direction="right">
+      <Drawer direction="right" open={isDrawerOpen} onOpenChange={handleOpenChange}>
         <DrawerTrigger asChild {...hoverProps}>
           <div className="group relative z-20 aspect-video overflow-hidden rounded-xl p-2">
             <div className="absolute inset-0 z-30 bg-background opacity-0 group-hover:opacity-50 transition-opacity m-2 mb-0 grid place-items-center rounded-xl overflow-hidden">

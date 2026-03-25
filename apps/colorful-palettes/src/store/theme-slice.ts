@@ -41,7 +41,7 @@ export const createThemeSlice: StateCreator<ColorfulStore, [], [], ThemeSlice> =
       isReady: true,
     });
 
-    state.buildStrings();
+    state.resetStrings();
   },
 
   setInputColor: (inputColor) => {

@@ -16,33 +16,43 @@ function buildColorString(
   return lines.join("\n");
 }
 
-export const createThemeStringSlice: StateCreator<ColorfulStore, [], [], ThemeStringSlice> = (
-  set,
-  get,
-) => ({
+const EMPTY_STRINGS = {
   primaryString: "",
   secondaryString: "",
   tertiaryString: "",
   errorString: "",
   neutralString: "",
   grayString: "",
+};
+
+export const createThemeStringSlice: StateCreator<ColorfulStore, [], [], ThemeStringSlice> = (
+  set,
+  get,
+) => ({
+  ...EMPTY_STRINGS,
   buildStrings: () => {
     const state = get();
     const palettes = state.colorfulPalettes;
-    const primaryString = buildColorString(palettes?.primaryPalette, "primary", state.colorFormat);
+
+    if (!palettes) {
+      set(EMPTY_STRINGS);
+      return;
+    }
+
+    const primaryString = buildColorString(palettes.primaryPalette, "primary", state.colorFormat);
     const secondaryString = buildColorString(
-      palettes?.secondaryPalette,
+      palettes.secondaryPalette,
       "secondary",
       state.colorFormat,
     );
     const tertiaryString = buildColorString(
-      palettes?.tertiaryPalette,
+      palettes.tertiaryPalette,
       "tertiary",
       state.colorFormat,
     );
-    const errorString = buildColorString(palettes?.errorPalette, "error", state.colorFormat);
-    const neutralString = buildColorString(palettes?.neutralPalette, "neutral", state.colorFormat);
-    const grayString = buildColorString(palettes?.grayPalette, "gray", state.colorFormat);
+    const errorString = buildColorString(palettes.errorPalette, "error", state.colorFormat);
+    const neutralString = buildColorString(palettes.neutralPalette, "neutral", state.colorFormat);
+    const grayString = buildColorString(palettes.grayPalette, "gray", state.colorFormat);
 
     set({
       primaryString,
@@ -52,5 +62,8 @@ export const createThemeStringSlice: StateCreator<ColorfulStore, [], [], ThemeSt
       neutralString,
       grayString,
     });
+  },
+  resetStrings: () => {
+    set(EMPTY_STRINGS);
   },
 });
