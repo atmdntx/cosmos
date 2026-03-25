@@ -1,7 +1,14 @@
 import React, { Suspense } from "react";
 import { useHover } from "react-aria";
 import { Button } from "./ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
 import { DownloadIcon } from "./ui/download";
 import { Tabs, TabsContent, TabsIndicator, TabsList, TabsTrigger } from "./ui/tabs";
 import { Spinner } from "./ui/spinner";
@@ -29,13 +36,14 @@ export function Exporter() {
       <DialogContent className="sm:max-w-[calc(100%-2rem)] lg:max-w-max">
         <DialogHeader>
           <DialogTitle>{m.export()}</DialogTitle>
+          <DialogDescription>{m.export_description()}</DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="css" className="overflow-hidden no-scrollbar">
           <TabsList>
-            <TabsTrigger value="css">CSS</TabsTrigger>
-            <TabsTrigger value="tailwindcss">TailwindCSS</TabsTrigger>
+            <TabsTrigger value="css">{m.tab_css()}</TabsTrigger>
+            <TabsTrigger value="tailwindcss">{m.tab_tailwindcss()}</TabsTrigger>
             <TabsTrigger value="shadcn" disabled>
-              Shadcn
+              {m.tab_shadcn()}
             </TabsTrigger>
             <TabsIndicator />
           </TabsList>
@@ -49,7 +57,7 @@ export function Exporter() {
               <CodeBlock code={tailwindString} />
             </Suspense>
           </TabsContent>
-          <TabsContent value="shadcn">Coming soon</TabsContent>
+          <TabsContent value="shadcn">{m.coming_soon()}</TabsContent>
         </Tabs>
       </DialogContent>
     </Dialog>

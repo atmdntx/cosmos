@@ -12,6 +12,4 @@ export const createThemeOptionsSlice: StateCreator<
   colorScheme: "default",
   colorFormat: "oklch",
   useLightDark: true,
-  selector: ".root",
-  darkSelector: ".dark",
 });

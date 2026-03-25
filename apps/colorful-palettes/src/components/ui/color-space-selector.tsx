@@ -11,6 +11,7 @@ import { COLOR_FORMATS } from "#/lib/constants";
 import { ChevronsUpDownIcon } from "./chevrons-up-down";
 import { useHover } from "react-aria";
 import { useColorfulStore } from "#/store/store";
+import { m } from "@/paraglide/messages";
 
 export function ColorSpaceSelector() {
   const colorFormat = useColorfulStore.use.colorFormat();
@@ -18,7 +19,7 @@ export function ColorSpaceSelector() {
   const { isHovered, hoverProps } = useHover({});
   return (
     <div className="flex flex-col gap-1">
-      <span className="text-xs text-muted-foreground font-semibold">Color Format</span>
+      <span className="text-xs text-muted-foreground font-semibold">{m.label_color_format()}</span>
       <DropdownMenu>
         <DropdownMenuTrigger
           render={<Button {...hoverProps} className="w-full" size="lg" variant="outline" />}

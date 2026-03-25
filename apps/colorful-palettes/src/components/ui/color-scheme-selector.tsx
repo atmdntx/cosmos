@@ -11,6 +11,7 @@ import { ChevronsUpDownIcon } from "./chevrons-up-down";
 import { useHover } from "react-aria";
 import { COLOR_SCHEMES } from "@cosmos/colorful";
 import { useColorfulStore } from "#/store/store";
+import { m } from "@/paraglide/messages";
 
 export function ColorSchemeSelector() {
   const colorScheme = useColorfulStore.use.colorScheme();
@@ -18,7 +19,7 @@ export function ColorSchemeSelector() {
   const { isHovered, hoverProps } = useHover({});
   return (
     <div className="flex flex-col gap-1">
-      <span className="text-xs text-muted-foreground font-semibold">Color Scheme</span>
+      <span className="text-xs text-muted-foreground font-semibold">{m.label_color_scheme()}</span>
       <DropdownMenu>
         <DropdownMenuTrigger
           render={<Button {...hoverProps} className="w-full" size="lg" variant="outline" />}

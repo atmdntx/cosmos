@@ -26,7 +26,7 @@ export function LinkShare() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{m.share_link()}</DialogTitle>
-          <DialogDescription>Bla bla bla bla</DialogDescription>
+          <DialogDescription>{m.share_dialog_description()}</DialogDescription>
         </DialogHeader>
       </DialogContent>
     </Dialog>

@@ -12,4 +12,10 @@ export const createThemeGeneratorSlice: StateCreator<
   cssString: "",
   tailwindString: "",
   isReady: false,
+  primaryVarsString: "",
+  secondaryVarsString: "",
+  tertiaryVarsString: "",
+  neutralVarsString: "",
+  grayVarsString: "",
+  errorVarsString: "",
 });

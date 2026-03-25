@@ -11,6 +11,7 @@ import { Button } from "./button";
 import { MoonIcon } from "./moon";
 import { SunIcon } from "./sun";
 import { SunMoonIcon } from "./sun-moon";
+import { m } from "@/paraglide/messages";
 
 export function ThemeSwitcher() {
   const { hoverProps, isHovered } = useHover({});
@@ -20,7 +21,7 @@ export function ThemeSwitcher() {
       <DropdownMenuTrigger
         render={
           <Button {...hoverProps} size="icon" variant="ghost">
-            <span className="sr-only">Change theme</span>
+            <span className="sr-only">{m.aria_change_theme()}</span>
             {themeMode === "dark" ? (
               <MoonIcon animate={isHovered} />
             ) : themeMode === "light" ? (
@@ -35,15 +36,15 @@ export function ThemeSwitcher() {
         <DropdownMenuRadioGroup value={themeMode} onValueChange={setTheme}>
           <DropdownMenuRadioItem value="system">
             <SunMoonIcon />
-            System
+            {m.theme_system()}
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="light">
             <SunIcon />
-            Light
+            {m.theme_light()}
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="dark">
             <MoonIcon />
-            Dark
+            {m.theme_dark()}
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>

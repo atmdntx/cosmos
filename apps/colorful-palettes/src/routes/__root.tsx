@@ -9,6 +9,7 @@ import { THEME_COLORS, ThemeProvider, useHtmlClass } from "#/components/ui/theme
 import { useColorfulStore } from "#/store/store";
 import { useEffect } from "react";
 import { getLocale } from "#/paraglide/runtime";
+import { m } from "@/paraglide/messages";
 
 export const Route = createRootRouteWithContext()({
   head: () => ({
@@ -31,7 +32,7 @@ export const Route = createRootRouteWithContext()({
         media: "(prefers-color-scheme: dark)",
       },
       {
-        title: "Colorful Palettes",
+        title: m.site_title(),
       },
     ],
     links: [
@@ -80,7 +81,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           }}
           plugins={[
             {
-              name: "Tanstack Router",
+              name: m.devtools_plugin_tanstack_router(),
               render: <TanStackRouterDevtoolsPanel />,
             },
           ]}

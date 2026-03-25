@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { m } from "@/paraglide/messages";
 
 type CopyStatus = "idle" | "reading" | "copying" | "copied" | "already" | "error";
 
@@ -97,7 +98,7 @@ export function useCopyToClipboard(
 
   const readClipboard = useCallback(async () => {
     if (!hasClipboardRead()) {
-      const err = new Error("Clipboard read is not supported in this context.");
+      const err = new Error(m.error_clipboard_read());
       setError(err);
       setStatus("error");
       return null;
@@ -120,7 +121,7 @@ export function useCopyToClipboard(
   const copy = useCallback(
     async (value?: string) => {
       if (!hasClipboardWrite()) {
-        const err = new Error("Clipboard write is not supported in this context.");
+        const err = new Error(m.error_clipboard_write());
         setError(err);
         setStatus("error");
         return false;
@@ -128,7 +129,7 @@ export function useCopyToClipboard(
 
       const target = value ?? textRef.current;
       if (!target) {
-        const err = new Error("Nothing to copy.");
+        const err = new Error(m.error_nothing_to_copy());
         setError(err);
         setStatus("error");
         return false;

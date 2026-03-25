@@ -6,6 +6,7 @@ import { LinkShare } from "./link-share";
 import { Separator } from "./ui/separator";
 import { ThemeSwitcher } from "./ui/theme-switcher";
 import { GithubLinks } from "./github-links";
+import { m } from "@/paraglide/messages";
 
 export default function Header() {
   return (
@@ -14,7 +15,7 @@ export default function Header() {
         <div>
           <Button nativeButton={false} render={<Link to="/" />} variant="ghost">
             <ColorfulLogo />
-            ColorfulPalettes
+            {m.brand_name()}
           </Button>
         </div>
         <div className="flex gap-1">

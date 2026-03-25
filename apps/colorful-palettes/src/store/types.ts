@@ -26,6 +26,16 @@ export interface ThemeOptionsSlice {
   darkSelector?: string;
 }
 
+export interface ThemeStringSlice {
+  primaryString: string;
+  secondaryString: string;
+  tertiaryString: string;
+  errorString: string;
+  neutralString: string;
+  grayString: string;
+  buildStrings: () => void;
+}
+
 export interface ThemeSlice {
   regenerate: () => void;
   setInputColor: (inputColor: string) => void;
@@ -36,7 +46,7 @@ export interface ThemeSlice {
   setDarkSelector: (darkSelector?: string) => void;
 }
 
-export type ColorfulStore = ThemeOptionsSlice & ThemeGeneratorSlice & ThemeSlice;
+export type ColorfulStore = ThemeOptionsSlice & ThemeGeneratorSlice & ThemeSlice & ThemeStringSlice;
 
 export type WithSelectors<S> = S extends { getState: () => infer T }
   ? S & { use: { [K in keyof T]: () => T[K] } }

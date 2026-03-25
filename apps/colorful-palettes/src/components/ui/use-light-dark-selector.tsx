@@ -1,6 +1,7 @@
 import { useColorfulStore } from "#/store/store";
 import { Checkbox } from "./checkbox";
 import { Field, FieldContent, FieldDescription, FieldLabel, FieldTitle } from "./field";
+import { m } from "@/paraglide/messages";
 
 export function LightDarkSelector() {
   const useLightDark = useColorfulStore.use.useLightDark();
@@ -9,10 +10,8 @@ export function LightDarkSelector() {
     <FieldLabel htmlFor="light-dark" className="bg-background">
       <Field orientation="horizontal">
         <FieldContent>
-          <FieldTitle>Use light-dark()</FieldTitle>
-          <FieldDescription className="text-xs">
-            CSS function that switches colors based on system color-scheme.
-          </FieldDescription>
+          <FieldTitle>{m.label_use_light_dark()}</FieldTitle>
+          <FieldDescription className="text-xs">{m.description_light_dark()}</FieldDescription>
         </FieldContent>
         <Checkbox checked={useLightDark} onCheckedChange={setUseLightDark} id="light-dark" />
       </Field>

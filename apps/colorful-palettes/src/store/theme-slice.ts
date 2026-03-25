@@ -40,6 +40,8 @@ export const createThemeSlice: StateCreator<ColorfulStore, [], [], ThemeSlice> =
       tailwindString: result.tailwindString,
       isReady: true,
     });
+
+    state.buildStrings();
   },
 
   setInputColor: (inputColor) => {

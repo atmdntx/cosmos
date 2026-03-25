@@ -25,6 +25,7 @@ import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "
 import { Field, FieldLabel } from "./field";
 import type { ColorfulShade } from "@cosmos/colorful";
 import { useColorfulStore } from "#/store/store";
+import { m } from "@/paraglide/messages";
 
 function ColorArea(props: AriaColorAreaProps) {
   const inputXRef = useRef<HTMLInputElement>(null);
@@ -123,11 +124,13 @@ function ColorPicker(props: ColorPickerProps) {
   const setInputColor = useColorfulStore.use.setInputColor();
   return (
     <Field className="gap-1">
-      <FieldLabel className="text-xs font-semibold text-muted-foreground">Base color</FieldLabel>
+      <FieldLabel className="text-xs font-semibold text-muted-foreground">
+        {m.label_base_color()}
+      </FieldLabel>
       <InputGroup className="flex items-center bg-background">
         <ColorField
           autoFocus={false}
-          aria-label="Color picker"
+          aria-label={m.aria_color_picker()}
           value={color}
           onChange={(e) => {
             colorPickerState.setColor(e);

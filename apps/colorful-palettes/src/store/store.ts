@@ -3,11 +3,13 @@ import { createThemeGeneratorSlice } from "./theme-generator-slice";
 import { createThemeOptionsSlice } from "./theme-options-slice";
 import { createThemeSlice } from "./theme-slice";
 import type { ColorfulStore, WithSelectors } from "./types";
+import { createThemeStringSlice } from "./theme-string-slice";
 
 const useColorfulStoreBase = create<ColorfulStore>()((...a) => ({
   ...createThemeOptionsSlice(...a),
   ...createThemeGeneratorSlice(...a),
   ...createThemeSlice(...a),
+  ...createThemeStringSlice(...a),
 }));
 
 const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(_store: S) => {

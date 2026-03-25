@@ -7,6 +7,7 @@ import {
   Drawer,
   DrawerContent,
   DrawerDescription,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -24,11 +25,14 @@ import {
 } from "./item";
 import { useColorfulStore } from "#/store/store";
 import type { ColorFormat } from "@cosmos/themes";
+import { m } from "@/paraglide/messages";
+import { CopyButton } from "./copybutton";
 
 interface PaletteProps<T> extends ComponentProps<"div"> {
   palette: T;
   label: string;
   description?: string;
+  codeString?: string;
 }
 
 function PaletteItem({ shade, colorFormat }: { shade: ColorfulShade; colorFormat: ColorFormat }) {
@@ -70,6 +74,7 @@ export function Palette<T extends ColorfulPalette>({
   palette,
   label,
   description,
+  codeString,
   ...props
 }: PaletteProps<T>) {
   const { hoverProps, isHovered } = useHover({});
@@ -96,17 +101,22 @@ export function Palette<T extends ColorfulPalette>({
         <DrawerContent>
           <DrawerHeader>
             <DrawerTitle className="font-semibold">{palette.name}</DrawerTitle>
-            <DrawerDescription>
-              {description ?? `Use this color as the ${label} palette.`}
-            </DrawerDescription>
+            <DrawerDescription>{description ?? label}</DrawerDescription>
           </DrawerHeader>
           <div className="flex flex-col gap-2 no-scrollbar overflow-y-hidden">
             <div className="flex justify-between items-center px-4 font-semibold text-muted-foreground [font-variant-caps:all-small-caps]">
-              <h3 className="font-semibold text-base">Technical specs</h3>
-              <span className="text-sm">Contrast ratio</span>
+              <h3 className="font-semibold text-base">{m.palette_specs_heading()}</h3>
+              <span className="text-sm">{m.palette_contrast_label()}</span>
             </div>
             <PaletteContent palette={palette} />
           </div>
+          {codeString && (
+            <DrawerFooter>
+              <CopyButton variant="default" size="default" copyContent={codeString}>
+                Copy Code
+              </CopyButton>
+            </DrawerFooter>
+          )}
         </DrawerContent>
       </Drawer>
       <CardHeader>

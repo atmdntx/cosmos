@@ -5,6 +5,7 @@ import { useHover } from "react-aria";
 import { mergeProps } from "@base-ui/react";
 import { CheckIcon } from "./check";
 import { CopyIcon } from "./copy";
+import { m } from "@/paraglide/messages";
 
 export function CopyButton({
   copyContent,
@@ -16,17 +17,21 @@ export function CopyButton({
   const { hoverProps, isHovered } = useHover({});
   return (
     <Button
-      aria-label="Copy to Clipboard"
+      aria-label={m.aria_copy_to_clipboard()}
       data-slot="copy-button"
       size={size}
       variant={variant}
       onClick={() => copy(copyContent)}
       {...mergeProps(props, hoverProps)}
     >
+      {props.children}
       {status === "copied" || status === "already" ? (
-        <CheckIcon animate={status === "copied" || status === "already" || isHovered} />
+        <CheckIcon
+          data-icon={props.children ? "inline-end" : undefined}
+          animate={status === "copied" || status === "already" || isHovered}
+        />
       ) : (
-        <CopyIcon animate={isHovered} />
+        <CopyIcon data-icon={props.children ? "inline-end" : undefined} animate={isHovered} />
       )}
     </Button>
   );

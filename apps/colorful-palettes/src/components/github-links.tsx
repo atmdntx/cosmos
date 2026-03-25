@@ -11,6 +11,7 @@ import {
 import { GithubIcon } from "./ui/github";
 import { Link } from "@tanstack/react-router";
 import { TerminalIcon } from "./ui/terminal";
+import { m } from "@/paraglide/messages";
 
 export function GithubLinks() {
   const { isHovered, hoverProps } = useHover({});
@@ -18,21 +19,21 @@ export function GithubLinks() {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button {...hoverProps} variant="ghost" size="icon" aria-label="Get code">
+          <Button {...hoverProps} variant="ghost" size="icon" aria-label={m.aria_get_code()}>
             <GithubIcon animate={isHovered} />
           </Button>
         }
       />
       <DropdownMenuContent className="w-64">
         <DropdownMenuGroup>
-          <DropdownMenuLabel>Main</DropdownMenuLabel>
+          <DropdownMenuLabel>{m.github_section_main()}</DropdownMenuLabel>
           <DropdownMenuItem render={<Link to="/" />} className="font-mono">
             <TerminalIcon data-icon="inline-start" />
-            ColorfulPalettes App
+            {m.github_app_name()}
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuGroup>
-          <DropdownMenuLabel>Packages</DropdownMenuLabel>
+          <DropdownMenuLabel>{m.github_section_packages()}</DropdownMenuLabel>
           <DropdownMenuItem render={<Link to="/" />} className="font-mono">
             <TerminalIcon data-icon="inline-start" />
             @cosmos/colorful
