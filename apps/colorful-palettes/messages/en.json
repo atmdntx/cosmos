@@ -14,6 +14,7 @@
   "error_clipboard_read": "Clipboard read is not supported in this context.",
   "error_clipboard_write": "Clipboard write is not supported in this context.",
   "error_nothing_to_copy": "Nothing to copy.",
+  "success_clipboard_copy": "Copied to clipboard.",
   "export": "Your Colorful Theme is ready",
   "export_description": "Copy CSS or Tailwind tokens for your current palette.",
   "export_theme": "Export Theme",

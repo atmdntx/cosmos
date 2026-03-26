@@ -68,7 +68,7 @@ export default function Header() {
             <LinkShare hideTrigger open={linkShareOpen} onOpenChange={setLinkShareOpen} />
           </>
         ) : (
-          <div className="flex gap-1">
+          <div className="hidden sm:flex gap-1">
             <Exporter />
             <LinkShare />
             <Separator orientation="vertical" />

@@ -1,6 +1,4 @@
 import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { TanStackDevtools } from "@tanstack/react-devtools";
 import Header from "../components/header";
 
 import appCss from "../styles.css?url";
@@ -10,6 +8,7 @@ import { useColorfulStore } from "#/store/store";
 import { useEffect } from "react";
 import { getLocale } from "#/paraglide/runtime";
 import { m } from "@/paraglide/messages";
+import { Toaster } from "#/components/ui/sonner";
 
 export const Route = createRootRouteWithContext()({
   head: () => ({
@@ -74,17 +73,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Header />
         {children}
 
-        <TanStackDevtools
-          config={{
-            position: "bottom-right",
-          }}
-          plugins={[
-            {
-              name: m.devtools_plugin_tanstack_router(),
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
+        <Toaster />
         <Scripts />
       </body>
     </html>

@@ -1,14 +1,18 @@
-import { Card, CardContent, CardHeader } from "#/components/ui/card";
+import { Card, CardContent } from "#/components/ui/card";
 import { ColorPicker } from "#/components/ui/colorpicker";
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@cosmos/colorful";
 import { ColorSpaceSelector } from "#/components/ui/color-space-selector";
 import { LightDarkSelector } from "#/components/ui/use-light-dark-selector";
 import { ColorSchemeSelector } from "#/components/ui/color-scheme-selector";
-import { PaletteExplorer } from "#/components/palette-explorer";
 import { AppVisualizer } from "#/components/app-visualizer";
+import { Spinner } from "#/components/ui/spinner";
 import { useColorfulStore } from "#/store/store";
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
+
+const PaletteExplorer = lazy(async () => ({
+  default: (await import("#/components/palette-explorer")).PaletteExplorer,
+}));
 
 type PresetParams = {
   preset?: string;
@@ -39,18 +43,28 @@ function App() {
   return (
     <main className="flex min-h-0 flex-1 flex-col gap-6 pt-3 p-6 md:flex-row-reverse">
       <AppVisualizer>
-        <PaletteExplorer />
+        <Suspense fallback={<PaletteExplorerFallback />}>
+          <PaletteExplorer />
+        </Suspense>
       </AppVisualizer>
       <Card className="md:w-56 ring-0 bg-sidebar">
-        <CardHeader>
+        <CardContent className="flex flex-wrap md:flex-col gap-3">
           <ColorPicker defaultValue={inputColor} />
-        </CardHeader>
-        <CardContent className="flex flex-col gap-2">
-          <ColorSchemeSelector />
-          <ColorSpaceSelector />
+          <div className="flex md:flex-col gap-3 w-full">
+            <ColorSchemeSelector />
+            <ColorSpaceSelector />
+          </div>
           <LightDarkSelector />
         </CardContent>
       </Card>
     </main>
+  );
+}
+
+function PaletteExplorerFallback() {
+  return (
+    <div className="flex flex-1 items-center justify-center p-6">
+      <Spinner className="size-8" />
+    </div>
   );
 }

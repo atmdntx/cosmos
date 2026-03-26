@@ -120,7 +120,7 @@ export function Palette<T extends ColorfulPalette>({
           <div className="flex flex-col gap-2 no-scrollbar overflow-y-hidden">
             <div className="flex justify-between items-center px-4 font-semibold text-muted-foreground [font-variant-caps:all-small-caps]">
               <h3 className="font-semibold text-base">{m.palette_specs_heading()}</h3>
-              <span className="text-sm">{m.palette_contrast_label()}</span>
+              <span className="text-sm text-right">{m.palette_contrast_label()}</span>
             </div>
             <PaletteContent palette={palette} />
           </div>

@@ -18,7 +18,7 @@ export function ColorSchemeSelector() {
   const setColorScheme = useColorfulStore.use.setColorScheme();
   const { isHovered, hoverProps } = useHover({});
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col w-full gap-1">
       <span className="text-xs text-muted-foreground font-semibold">{m.label_color_scheme()}</span>
       <DropdownMenu>
         <DropdownMenuTrigger

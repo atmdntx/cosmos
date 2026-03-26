@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { m } from "@/paraglide/messages";
+import { toast } from "sonner";
 
 type CopyStatus = "idle" | "reading" | "copying" | "copied" | "already" | "error";
 
@@ -101,6 +102,7 @@ export function useCopyToClipboard(
       const err = new Error(m.error_clipboard_read());
       setError(err);
       setStatus("error");
+      toast.error(m.error_clipboard_read(), { position: "top-center" });
       return null;
     }
 
@@ -114,6 +116,7 @@ export function useCopyToClipboard(
       const err = toError(reason);
       setError(err);
       setStatus("error");
+      toast.error(m.error_clipboard_read(), { position: "top-center" });
       return null;
     }
   }, []);
@@ -124,6 +127,7 @@ export function useCopyToClipboard(
         const err = new Error(m.error_clipboard_write());
         setError(err);
         setStatus("error");
+        toast.error(m.error_clipboard_write(), { position: "top-center" });
         return false;
       }
 
@@ -132,6 +136,7 @@ export function useCopyToClipboard(
         const err = new Error(m.error_nothing_to_copy());
         setError(err);
         setStatus("error");
+        toast.error(m.error_nothing_to_copy(), { position: "top-center" });
         return false;
       }
 
@@ -146,11 +151,12 @@ export function useCopyToClipboard(
             setClipboardText(currentClipboard);
             if (currentClipboard === target) {
               setStatus("already");
+              toast.success(m.success_clipboard_copy(), { position: "top-center" });
               scheduleReset();
               return true;
             }
           } catch (reason) {
-            // Reading may fail due to permissions; surface the error but keep copying.
+            toast.error(m.error_clipboard_write(), { position: "top-center" });
             setError(toError(reason));
           }
         }
@@ -159,6 +165,7 @@ export function useCopyToClipboard(
         setClipboardText(target);
         setError(null);
         setStatus("copied");
+        toast.success(m.success_clipboard_copy(), { position: "top-center" });
         scheduleReset();
         return true;
       } catch (reason) {

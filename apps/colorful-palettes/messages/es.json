@@ -14,6 +14,7 @@
   "error_clipboard_read": "La lectura del portapapeles no es compatible en este contexto.",
   "error_clipboard_write": "La escritura en el portapapeles no es compatible en este contexto.",
   "error_nothing_to_copy": "Nada para copiar.",
+  "success_clipboard_copy": "Copiado al portapapeles.",
   "export": "El Tema Colorful está listo",
   "export_description": "Copia el CSS o los tokens de Tailwind de tu paleta actual.",
   "export_theme": "Exportar Tema",

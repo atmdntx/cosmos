@@ -18,7 +18,7 @@ export function ColorSpaceSelector() {
   const setColorFormat = useColorfulStore.use.setColorFormat();
   const { isHovered, hoverProps } = useHover({});
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 w-full">
       <span className="text-xs text-muted-foreground font-semibold">{m.label_color_format()}</span>
       <DropdownMenu>
         <DropdownMenuTrigger
