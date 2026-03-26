@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+set -euo pipefail
+
+repo_dir="$(cd "$(dirname "$0")/.." && pwd)"
+node_bin="$repo_dir/node_modules/.bin"
+global_vp="$HOME/.vite-plus/bin/vp"
+
+# Prefer the global Vite+ binary (it includes `dlx`); fall back to local if needed.
+if [ -x "$global_vp" ]; then
+  vp_bin="$global_vp"
+else
+  if command -v vp >/dev/null 2>&1; then
+    vp_bin="$(command -v vp)"
+  elif [ -x "$node_bin/vp" ]; then
+    vp_bin="$node_bin/vp"
+  else
+    echo "VITE+ commit hook: could not find the vp binary (checked $global_vp and $node_bin/vp)." >&2
+    exit 127
+  fi
+fi
+
+PATH="$PATH:$node_bin"
+exec "$vp_bin" dlx devmoji --edit --lint "$@"
