@@ -38,32 +38,34 @@ export default function Header() {
         </div>
         {isMobile ? (
           <>
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                render={(props, state) => (
-                  <Button {...props} size="icon" {...hoverProps} variant="outline">
-                    <MenuIcon animate={state.open} />
-                  </Button>
-                )}
-              />
-              <DropdownMenuContent className="w-48">
-                <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={() => setExporterOpen(true)}>
-                    <DownloadIcon className="size-4 shrink-0" />
-                    {m.export_theme()}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setLinkShareOpen(true)}>
-                    <SendIcon className="size-4 shrink-0" />
-                    {m.share_link()}
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <ThemeSwitcher />
-                  <GithubLinks />
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="flex items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={(props, state) => (
+                    <Button {...props} size="icon" {...hoverProps} variant="outline">
+                      <MenuIcon animate={state.open} />
+                    </Button>
+                  )}
+                />
+                <DropdownMenuContent className="w-48">
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem onClick={() => setExporterOpen(true)}>
+                      <DownloadIcon className="size-4 shrink-0" />
+                      {m.export_theme()}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setLinkShareOpen(true)}>
+                      <SendIcon className="size-4 shrink-0" />
+                      {m.share_link()}
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <ThemeSwitcher />
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <GithubLinks />
+            </div>
             <Exporter hideTrigger open={exporterOpen} onOpenChange={setExporterOpen} />
             <LinkShare hideTrigger open={linkShareOpen} onOpenChange={setLinkShareOpen} />
           </>
