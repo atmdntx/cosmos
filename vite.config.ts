@@ -2,7 +2,7 @@ import { defineConfig } from "vite-plus";
 export default defineConfig({
   staged: {
     "*": "vp check --fix",
-    "commit-msg": "devmoji --commit",
+    "commit-msg": "vp dlx devmoji --commit",
   },
   lint: {
     options: {
