@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, type ComponentProps } from "react";
 import { useHover } from "react-aria";
 import { Button } from "./ui/button";
 import {
@@ -14,38 +14,65 @@ import { Tabs, TabsContent, TabsIndicator, TabsList, TabsTrigger } from "./ui/ta
 import { Spinner } from "./ui/spinner";
 import { useColorfulStore } from "#/store/store";
 import { m } from "@/paraglide/messages";
+import { useIsMobile } from "#/hooks/use-mobile";
+import { cn } from "#/lib/utils";
+import { mergeProps } from "@base-ui/react";
+
+type ExporterProps = ComponentProps<typeof Button> & {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  hideTrigger?: boolean;
+};
 
 const CodeBlock = React.lazy(() =>
   import("./ui/codeblock").then((m) => ({ default: m.CodeBlock })),
 );
 
-export function Exporter() {
+export function Exporter({
+  open: openProp,
+  onOpenChange,
+  hideTrigger = false,
+  ...props
+}: ExporterProps) {
+  const isMobile = useIsMobile();
   const { hoverProps, isHovered } = useHover({});
   const cssString = useColorfulStore.use.cssString();
   const tailwindString = useColorfulStore.use.tailwindString();
   const buildStrings = useColorfulStore.use.buildStrings();
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false);
+  const isControlled = openProp !== undefined;
+  const isOpen = isControlled ? !!openProp : uncontrolledOpen;
 
   const handleOpenChange = React.useCallback(
     (open: boolean) => {
       if (open) {
         buildStrings();
       }
-      setIsOpen(open);
+      if (!isControlled) {
+        setUncontrolledOpen(open);
+      }
+      onOpenChange?.(open);
     },
-    [buildStrings],
+    [buildStrings, isControlled, onOpenChange],
   );
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogTrigger
-        render={
-          <Button {...hoverProps} variant="ghost">
-            {m.export_theme()}
-            <DownloadIcon data-icon="inline-end" animate={isHovered} />
-          </Button>
-        }
-      />
+      {!hideTrigger && (
+        <DialogTrigger
+          render={
+            <Button
+              {...mergeProps(hoverProps, props)}
+              variant="ghost"
+              className={cn(isMobile && "w-full justify-start")}
+            >
+              {isMobile && <DownloadIcon data-icon="inline-start" animate={isHovered} />}
+              {m.export_theme()}
+              {!isMobile && <DownloadIcon data-icon="inline-end" animate={isHovered} />}
+            </Button>
+          }
+        />
+      )}
       <DialogContent className="sm:max-w-[calc(100%-2rem)] lg:max-w-max">
         <DialogHeader>
           <DialogTitle>{m.export()}</DialogTitle>

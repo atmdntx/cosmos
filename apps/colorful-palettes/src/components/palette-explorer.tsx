@@ -23,7 +23,7 @@ export function PaletteExplorer() {
   } = palettes;
 
   return (
-    <div className="grid grid-cols-2 xl:grid-cols-3 gap-6 p-6 h-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 p-6 h-auto">
       <Palette
         label={m.palette_primary()}
         description={m.palette_primary_description()}

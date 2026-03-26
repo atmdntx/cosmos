@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ComponentProps } from "react";
 import { useHover } from "react-aria";
 import { Button } from "./ui/button";
 import {
@@ -16,10 +16,27 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
 import { Field, FieldContent, FieldLabel } from "./ui/field";
 import { useColorfulStore } from "#/store/store";
 import { CopyButton } from "./ui/copybutton";
+import { useIsMobile } from "#/hooks/use-mobile";
+import { cn } from "#/lib/utils";
+import { mergeProps } from "@base-ui/react";
 
-export function LinkShare() {
+type LinkShareProps = ComponentProps<typeof Button> & {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  hideTrigger?: boolean;
+};
+
+export function LinkShare({
+  open: openProp,
+  onOpenChange,
+  hideTrigger = false,
+  ...props
+}: LinkShareProps) {
+  const isMobile = useIsMobile();
   const { hoverProps, isHovered } = useHover({});
-  const [open, setOpen] = useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const isControlled = openProp !== undefined;
+  const open = isControlled ? !!openProp : uncontrolledOpen;
   const link = useColorfulStore.use.shareableUrl();
   const encodePreset = useColorfulStore.use.encodePreset();
   const inputColor = useColorfulStore.use.inputColor();
@@ -31,16 +48,28 @@ export function LinkShare() {
     if (!open) return;
     encodePreset();
   }, [open, encodePreset, inputColor, colorScheme, colorFormat, useLightDark]);
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!isControlled) {
+      setUncontrolledOpen(nextOpen);
+    }
+    onOpenChange?.(nextOpen);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        render={
-          <Button {...hoverProps} variant="ghost">
-            {m.share_link()}
-            <SendIcon data-icon="inline-end" animate={isHovered} />
-          </Button>
-        }
-      />
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      {!hideTrigger && (
+        <DialogTrigger
+          {...mergeProps(props, hoverProps)}
+          render={
+            <Button variant="ghost" className={cn(isMobile && "w-full justify-start")}>
+              {isMobile && <SendIcon data-icon="inline-start" animate={isHovered} />}
+              {m.share_link()}
+              {!isMobile && <SendIcon data-icon="inline-end" animate={isHovered} />}
+            </Button>
+          }
+        />
+      )}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{m.share_link()}</DialogTitle>
