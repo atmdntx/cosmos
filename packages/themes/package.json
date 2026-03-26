@@ -2,15 +2,16 @@
   "name": "@cosmos/themes",
   "version": "0.0.0",
   "description": "Theme token generator for Cosmos",
-  "homepage": "https://github.com/author/library#readme",
+  "homepage": "https://github.com/atmdntx/cosmos/tree/main/packages/themes#readme",
   "bugs": {
-    "url": "https://github.com/author/library/issues"
+    "url": "https://github.com/atmdntx/cosmos/issues"
   },
   "license": "MIT",
-  "author": "Author Name <author.name@mail.com>",
+  "author": "atmdntx",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/author/library.git"
+    "url": "git+https://github.com/atmdntx/cosmos.git",
+    "directory": "packages/themes"
   },
   "files": [
     "dist"

@@ -1,16 +1,17 @@
 {
   "name": "@cosmos/colorful",
   "version": "0.0.0",
-  "description": "A starter for creating a TypeScript package.",
-  "homepage": "https://github.com/author/library#readme",
+  "description": "Color palette utilities that power Cosmos.",
+  "homepage": "https://github.com/atmdntx/cosmos/tree/main/packages/colorful#readme",
   "bugs": {
-    "url": "https://github.com/author/library/issues"
+    "url": "https://github.com/atmdntx/cosmos/issues"
   },
   "license": "MIT",
-  "author": "Author Name <author.name@mail.com>",
+  "author": "atmdntx",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/author/library.git"
+    "url": "git+https://github.com/atmdntx/cosmos.git",
+    "directory": "packages/colorful"
   },
   "files": [
     "dist"
