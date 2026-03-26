@@ -13,13 +13,10 @@
     "url": "git+https://github.com/atmdntx/cosmos.git",
     "directory": "packages/colorful"
   },
-  "files": [
-    "dist"
-  ],
   "type": "module",
   "sideEffects": false,
   "exports": {
-    ".": "./dist/index.mjs",
+    ".": "./src/index.ts",
     "./package.json": "./package.json"
   },
   "publishConfig": {

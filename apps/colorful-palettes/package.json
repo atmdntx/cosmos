@@ -69,11 +69,5 @@
     "vite-plus": "catalog:",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "catalog:"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "lightningcss"
-    ]
   }
 }
