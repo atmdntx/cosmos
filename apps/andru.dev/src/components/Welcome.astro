@@ -2,8 +2,10 @@
 import { Content } from './info.md';
 import { getPackages } from '../lib/packages';
 import Item from './Item.astro';
+import { getApps } from '../lib/apps';
 
 const packages = getPackages();
+const apps = getApps();
 ---
 
 <div class="bg-white p-4 shadow-2xl rounded-2xl prose-sm">
@@ -13,6 +15,16 @@ const packages = getPackages();
 			packages.map((pkg) => (
 				<li>
 					<Item pkg={pkg} />
+				</li>
+			))
+		}
+	</ul>
+	<hr class="m-2! border-t border-t-mist-300" />
+	<ul class="not-prose">
+		{
+			apps.map((app) => (
+				<li>
+					<Item pkg={app} />
 				</li>
 			))
 		}

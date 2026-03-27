@@ -1,6 +1,9 @@
 {
   "name": "colorful-palettes",
+  "version": "0.1.0",
   "private": true,
+  "description": "Playground for exploring and sharing colorful palettes built with Cosmos.",
+  "homepage": "https://colorful-palettes.andru.dev",
   "type": "module",
   "imports": {
     "#/*": "./src/*"
