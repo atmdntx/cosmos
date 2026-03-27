@@ -1,0 +1,20 @@
+{
+  "name": "andru.dev",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@tailwindcss/typography": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "astro": "^6.1.1",
+    "tailwindcss": "catalog:"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
