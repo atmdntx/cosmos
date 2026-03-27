@@ -1,6 +1,6 @@
 {
   "name": "@cosmos/colorful",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Color palette utilities that power Cosmos.",
   "homepage": "https://github.com/atmdntx/cosmos/tree/main/packages/colorful#readme",
   "bugs": {
