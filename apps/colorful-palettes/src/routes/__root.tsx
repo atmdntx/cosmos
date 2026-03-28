@@ -69,7 +69,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="h-svh relative flex flex-col overflow-hidden">
+      <body className="h-svh relative flex flex-col">
         <Header />
         {children}
 
