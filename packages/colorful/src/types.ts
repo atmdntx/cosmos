@@ -2,7 +2,14 @@ import type Color from "colorjs.io";
 import type { ColorTypes } from "colorjs.io";
 export type { ColorTypes };
 export type PaletteTypes = "primary" | "secondary" | "tertiary" | "neutral" | "gray" | "error";
-export type ColorScheme = "default" | "gradient" | "triad" | "analogous" | "split" | "pop";
+export type ColorScheme =
+  | "default"
+  | "gradient"
+  | "triad"
+  | "analogous"
+  | "split"
+  | "pop"
+  | "asymmetric";
 
 export enum TailwindColorNames {
   Red = "red",

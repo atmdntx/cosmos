@@ -12,4 +12,5 @@ export const COLOR_SCHEMES: ColorScheme[] = [
   "analogous",
   "split",
   "pop",
+  "asymmetric",
 ];

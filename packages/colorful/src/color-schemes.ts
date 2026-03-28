@@ -126,6 +126,59 @@ const COLOR_SCHEMES: Record<ColorScheme, ColorSchemes> = {
       },
     },
   },
+  asymmetric: {
+    name: "Asymmetric",
+    overrides: {
+      primary: {
+        chroma: {
+          type: "factor",
+          value: 1.5,
+        },
+      },
+      secondary: {
+        hue: {
+          type: "shift",
+          value: 210,
+        },
+        chroma: {
+          type: "factor",
+          value: 1.5,
+        },
+      },
+      tertiary: {
+        hue: {
+          type: "shift",
+          value: -45,
+        },
+        chroma: {
+          type: "factor",
+          value: 1.5,
+        },
+      },
+      error: {
+        chroma: {
+          type: "factor",
+          value: 1.25,
+        },
+      },
+      neutral: {
+        hue: {
+          type: "shift",
+          value: 210,
+        },
+        chroma: {
+          type: "factor",
+          value: 0.9,
+        },
+      },
+      gray: {
+        chroma: {
+          type: "factor",
+          value: 0.5,
+        },
+      },
+    },
+  },
 };
 
 function mergeRoleTransforms(base: RoleMap, overrides: Partial<RoleMap> = {}) {
