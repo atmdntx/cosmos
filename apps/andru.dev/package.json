@@ -12,6 +12,7 @@
     "@tailwindcss/typography": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "astro": "^6.1.1",
+    "sharp": "catalog:",
     "tailwindcss": "catalog:"
   },
   "engines": {
