@@ -1,6 +1,6 @@
 {
   "name": "@cosmos/themes",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Theme token generator for Cosmos",
   "homepage": "https://github.com/atmdntx/cosmos/tree/main/packages/themes#readme",
   "bugs": {

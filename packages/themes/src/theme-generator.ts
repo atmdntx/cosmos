@@ -10,7 +10,16 @@ import {
 import type { ColorFormat, ThemeConfig, ThemeToken } from "./types";
 import { COLORFUL_THEME } from "./colorful";
 
-interface ThemeGeneratorOptions<T> {
+const PALETTE_TYPES: PaletteTypes[] = [
+  "primary",
+  "secondary",
+  "tertiary",
+  "neutral",
+  "gray",
+  "error",
+];
+
+export interface ThemeGeneratorOptions<T> {
   colorScheme?: ColorScheme;
   colorFormat?: ColorFormat;
   tokens?: ThemeConfig<T>[];
@@ -74,6 +83,25 @@ export class ThemeGenerator<T> {
     return this.#buildThemeString(lightSelector, darkSelector, "color-");
   }
 
+  get baseString(): string {
+    const paletteVariables = this.#getPaletteVariables();
+    if (this.#useLightDark) {
+      const lightDarkLines = paletteVariables.map(({ name, light, dark }) =>
+        this.#makeLightDarkString(name, light, dark),
+      );
+      return this.#formatString(lightDarkLines, ":root");
+    }
+    const lightLines = paletteVariables.map(({ name, light }) =>
+      this.#makeSingleThemeString(name, light),
+    );
+    const darkLines = paletteVariables.map(({ name, dark }) =>
+      this.#makeSingleThemeString(name, dark),
+    );
+    const lightString = this.#formatString(lightLines, ":root");
+    const darkString = this.#formatString(darkLines, ".dark");
+    return `${lightString}\n\n${darkString}`;
+  }
+
   #buildThemeString(lightSelector: string, darkSelector: string, namePrefix = ""): string {
     const tokens = this.#getResolvedTokens();
     if (this.#useLightDark) {
@@ -120,6 +148,30 @@ export class ThemeGenerator<T> {
 
   #makeSingleThemeString(name: string, value: string) {
     return `--${name}: ${value};`;
+  }
+
+  #getPaletteVariables(): ResolvedToken[] {
+    const variables: ResolvedToken[] = [];
+    for (const paletteType of PALETTE_TYPES) {
+      const shadeEntries = Array.from(this.#getPaletteShadeMap(paletteType).entries()).sort(
+        (a, b) => a[0] - b[0],
+      );
+
+      for (const [shadeNumber, { color, contrast }] of shadeEntries) {
+        const baseName = `color-${paletteType}-${shadeNumber}`;
+        variables.push({
+          name: baseName,
+          light: color,
+          dark: color,
+        });
+        variables.push({
+          name: `${baseName}-contrast`,
+          light: contrast,
+          dark: contrast,
+        });
+      }
+    }
+    return variables;
   }
 
   #getTokenValue(value: ThemeToken): string {

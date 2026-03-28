@@ -51,3 +51,31 @@ test("wraps dark-only tokens in .dark when useLightDark is false for Tailwind", 
   expect(darkBlock).toContain(`--color-primary: ${darkValue};`);
   expect(css).not.toContain("light-dark(");
 });
+
+test("baseString uses light-dark declarations by default", () => {
+  const generator = new ThemeGenerator(BASE_COLOR, { colorFormat: "hex" });
+  const baseString = generator.baseString;
+
+  expect(baseString.startsWith(":root")).toBe(true);
+  expect(baseString).toMatch(/--color-primary-50:\s*light-dark\(/);
+  expect(baseString).toMatch(/--color-primary-50-contrast:\s*light-dark\(/);
+  expect(baseString).not.toContain(".dark {");
+});
+
+test("baseString emits .dark block when light-dark is disabled", () => {
+  const generator = new ThemeGenerator(BASE_COLOR, {
+    colorFormat: "hex",
+    useLightDark: false,
+  });
+
+  const baseString = generator.baseString;
+  const blocks = baseString.split("\n\n").filter(Boolean);
+
+  expect(blocks).toHaveLength(2);
+  const [rootBlock, darkBlock] = blocks;
+  expect(rootBlock.startsWith(":root")).toBe(true);
+  expect(darkBlock.startsWith(".dark")).toBe(true);
+  expect(rootBlock).toContain("--color-neutral-500:");
+  expect(darkBlock).toContain("--color-neutral-500-contrast:");
+  expect(baseString).not.toContain("light-dark(");
+});
