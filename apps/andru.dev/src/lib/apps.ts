@@ -28,16 +28,33 @@ function normalizeName(name?: string, fallback?: string | null) {
 
 const CURRENT_APP_FOLDER = "andru.dev";
 
+interface AppEntry {
+  path: string;
+  app: AppManifest;
+  folder: string | null;
+}
+
+function shouldIncludeApp({ folder, app }: AppEntry) {
+  if (!folder) return false;
+  if (folder === CURRENT_APP_FOLDER) return false;
+  if (app.name === CURRENT_APP_FOLDER) return false;
+  return true;
+}
+
 export function getApps() {
   return Object.entries(packageJsonModules)
-    .map(([path, app]) => {
-      const folder = folderNameFromPath(path);
+    .map<AppEntry>(([path, app]) => ({
+      path,
+      app,
+      folder: folderNameFromPath(path),
+    }))
+    .filter(shouldIncludeApp)
+    .map(({ folder, app }) => {
       const normalizedName = normalizeName(app.name, folder);
       return {
         folder,
         ...app,
         name: normalizedName,
       };
-    })
-    .filter(({ folder }) => folder != null && folder !== CURRENT_APP_FOLDER);
+    });
 }
