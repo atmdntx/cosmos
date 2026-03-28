@@ -8,7 +8,8 @@ const packages = getPackages();
 const apps = getApps();
 ---
 
-<div class="bg-white p-4 shadow-2xl rounded-2xl prose-sm">
+<div
+	class="bg-linear-to-b from-amber-500 to-red-500 p-4 z-10 prose-sm border-b-4 border-b-rose-900 hover:ring-8 transition-shadow focus-within:ring-8 ring-4 ring-rose-900">
 	<Content />
 	<ul class="not-prose">
 		{
@@ -19,7 +20,7 @@ const apps = getApps();
 			))
 		}
 	</ul>
-	<hr class="m-2! border-t border-t-mist-300" />
+	<hr class="m-2! border-t border-t-pink-900" />
 	<ul class="not-prose">
 		{
 			apps.map((app) => (

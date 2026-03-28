@@ -1,10 +1,13 @@
 ---
 import { Font } from 'astro:assets';
 import '../styles/global.css';
+import palm from '../assets/palm.png';
+import { getImage } from 'astro:assets';
+const bg = await getImage({ src: palm, format: 'webp' });
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="bg-linear-to-b from-blue-500 via-pink-500 to-red-500 inset-0 fixed">
 	<head>
 		<Font cssVariable="--font-poppins" />
 		<meta charset="UTF-8" />
@@ -13,9 +16,29 @@ import '../styles/global.css';
 		<meta name="generator" content={Astro.generator} />
 		<title>(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧°˖｡ﾟ</title>
 	</head>
-	<body class="w-dvw h-dvh grid place-content-center bg-mist-50 p-4">
+	<body
+		class="w-screen h-screen grid place-content-center p-4 **:focus-visible:outline-none **:focus-visible:ring-2 **:focus-visible:ring-offset-2 **:focus-visible:ring-offset-transparent **:focus-visible:ring-pink-500">
+		<div
+			class="absolute inset-0 -z-1 opacity-10 top-[env(safe-area-inset-top)] pointer-events-none"
+			style={{
+				backgroundImage: `
+        linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+        linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)
+      `,
+				backgroundSize: '20px 30px',
+				WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)',
+			}}>
+		</div>
 		<slot />
+		<div
+			class="fixed bottom-0 left-0 w-full h-[20dvh] mix-blend-color-burn"
+			style={{
+				backgroundImage: `var(--bg)`,
+				backgroundRepeat: 'repeat',
+				backgroundSize: '100px',
+				backgroundPosition: 'center',
+			}}>
+		</div>
 	</body>
 </html>
-
-<style></style>
+<style define:vars={{ bg: `url(${bg.src})` }}></style>
